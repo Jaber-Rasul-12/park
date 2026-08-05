@@ -1,0 +1,31 @@
+scopes:
+    created_at:
+        label: finance.finance::lang.model.center.created_at
+        type: date
+        conditions: created_at >= ':filtered'
+    published_at:
+        label: finance.finance::lang.plugin.published_at
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
+    model_type:
+        label: finance.finance::lang.model.invoice.model_type
+        type: group
+        conditions: type_id in (:filtered)
+        modelClass: Finance\Finance\Models\ModelType
+    center:
+        label: finance.finance::lang.model.invoice.center
+        type: group
+        conditions: center_id in (:filtered)
+        modelClass: Finance\Finance\Models\Center
+    type:
+        label: finance.finance::lang.model.invoice.type
+        type: group
+        modelClass: Finance\Finance\Models\Invoice
+        conditions: type IN (:filtered) 
+        options: getTypeOptions
+    currency:
+        label: finance.finance::lang.model.invoice.currency
+        type: group
+        modelClass: Finance\Finance\Models\Invoice
+        conditions: currency IN (:filtered) 
+        options: getCurrencyOptions

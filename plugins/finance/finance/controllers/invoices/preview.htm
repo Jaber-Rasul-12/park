@@ -1,0 +1,827 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('finance/finance/invoices') ?>"><?= e(trans('finance.finance::lang.controller.invoices.invoices')) ?></a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<?php if (!$this->fatalError): ?>
+
+<style>
+    /* ===== Reset & Base ===== */
+    * {
+        box-sizing: border-box;
+    }
+    
+    .invoice-preview-wrapper {
+        direction: rtl;
+        background: #f0f2f5;
+        padding: 30px;
+        min-height: 100vh;
+    }
+    
+    .invoice-container {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        padding: 50px 45px;
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
+    }
+    
+    /* ===== Header ===== */
+    .invoice-header {
+        text-align: center;
+        border-bottom: 3px double #1a3a5c;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .invoice-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a3a5c;
+        margin: 0;
+        letter-spacing: 2px;
+    }
+    
+    .invoice-header .subtitle {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+    
+    .invoice-header .header-line {
+        width: 150px;
+        height: 3px;
+        background: #1a3a5c;
+        margin: 10px auto 0;
+    }
+    
+    /* ===== Document Type ===== */
+    .document-type {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        padding: 15px 0;
+        margin: 10px 0 25px;
+        border-bottom: 2px solid #1a3a5c;
+        border-top: 2px solid #1a3a5c;
+        letter-spacing: 3px;
+        background: #f8f9fa;
+    }
+    
+    .document-type.payment {
+        color: #27ae60;
+        border-color: #27ae60;
+        background: #f0faf4;
+    }
+    
+    .document-type.receipt {
+        color: #e67e22;
+        border-color: #e67e22;
+        background: #fef9f0;
+    }
+    
+    .document-type .type-icon {
+        font-size: 28px;
+        margin-left: 10px;
+    }
+    
+    .document-type .doc-number {
+        font-size: 14px;
+        font-weight: 400;
+        color: #7f8c8d;
+        margin-right: 15px;
+    }
+    
+    /* ===== Fields Grid ===== */
+    .invoice-fields-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 30px;
+        padding: 15px 0;
+        margin-bottom: 15px;
+    }
+    
+    .field-group {
+        display: flex;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px dashed #ecf0f1;
+    }
+    
+    .field-group.full-width {
+        grid-column: 1 / -1;
+    }
+    
+    .field-label {
+        font-weight: 600;
+        color: #34495e;
+        min-width: 130px;
+        font-size: 14px;
+    }
+    
+    .field-label i {
+        margin-left: 8px;
+        color: #1a3a5c;
+        width: 18px;
+    }
+    
+    .field-value {
+        font-weight: 500;
+        color: #2c3e50;
+        font-size: 14px;
+        padding: 4px 12px;
+        /* background: #f8f9fa; */
+        border-radius: 4px;
+        flex: 1;
+        word-break: break-word;
+    }
+    
+    .field-value.highlight {
+        color: #1a3a5c;
+        font-weight: 700;
+        /* background: #e8edf2; */
+    }
+    
+    .field-value.amount {
+        color: #e74c3c;
+        font-weight: 700;
+        font-size: 18px;
+        /* background: #fdf0ee; */
+    }
+    
+    .field-value.currency-dollar {
+        color: #27ae60;
+    }
+    
+    .field-value.currency-syrian {
+        color: #e67e22;
+    }
+    
+    .field-value.statement {
+        /* background: #fff8e7; */
+        font-weight: 400;
+    }
+    
+    .field-value.uuid-value {
+        font-family: 'Courier New', monospace;
+        font-size: 11px;
+        /* background: #ecf0f1; */
+        direction: ltr;
+        text-align: right;
+    }
+    
+    /* ===== Divider ===== */
+    .invoice-divider {
+        border: none;
+        border-top: 2px solid #1a3a5c;
+        margin: 20px 0 25px;
+        position: relative;
+    }
+    
+    .invoice-divider::after {
+        content: '◆';
+        position: absolute;
+        left: 50%;
+        top: -12px;
+        transform: translateX(50%);
+        background: white;
+        padding: 0 15px;
+        color: #1a3a5c;
+        font-size: 16px;
+    }
+    
+    /* ===== Signatures ===== */
+    .signatures-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 10px;
+        padding-top: 20px;
+    }
+    
+    .signature-box {
+        text-align: center;
+        /* padding: 20px 15px; */
+        /* border: 1px solid #bdc3c7; */
+        border-radius: 8px;
+        /* background: #fafafa; */
+        /* min-height: 200px; */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .signature-box .signature-title {
+        font-weight: 700;
+        color: #1a3a5c;
+        font-size: 15px;
+        border-bottom: 1px solid #ecf0f1;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .signature-box .signature-title i {
+        margin-left: 8px;
+    }
+    
+    .signature-box .stamp-placeholder {
+        font-size: 14px;
+        color: #95a5a6;
+        border: 2px dashed #bdc3c7;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 10px auto;
+        font-weight: 600;
+    }
+    
+    .signature-box .stamp-placeholder i {
+        font-size: 30px;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .signature-box .signature-line {
+        border-top: 1px solid #2c3e50;
+        width: 80%;
+        margin: 15px auto 5px;
+        padding-top: 5px;
+    }
+    
+    .signature-box .signature-label {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+    
+    .signature-box .signature-space {
+        min-height: 40px;
+        margin: 10px 0;
+    }
+    
+    /* ===== Print Button ===== */
+    .print-button {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    
+    .btn-print {
+        background: #1a3a5c;
+        color: white;
+        padding: 10px 35px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+    
+    .btn-print:hover {
+        background: #2c5f8a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 58, 92, 0.3);
+    }
+    
+    .btn-print i {
+        margin-left: 8px;
+    }
+    
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+        .invoice-container {
+            padding: 25px 20px;
+        }
+        
+        .invoice-fields-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        
+        .field-group {
+            flex-wrap: wrap;
+        }
+        
+        .field-label {
+            min-width: 100%;
+            font-size: 13px;
+        }
+        
+        .field-value {
+            width: 100%;
+            margin-top: 2px;
+        }
+        
+        .signatures-section {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .document-type {
+            font-size: 18px;
+            padding: 10px 0;
+        }
+        
+        .invoice-header h1 {
+            font-size: 22px;
+        }
+    }
+    
+    /* ============================================
+       PRINT STYLES - CRITICAL FIX
+    ============================================ */
+    @media print {
+
+       @page {
+        background: none !important;
+        margin: 15mm !important;
+    }
+
+    /* إخفاء العناصر الأخرى */
+    .control-toolbar .toolbar-item .btn,
+    .control-toolbar .toolbar-item .btn-group,
+    .control-toolbar .toolbar-item .dropdown {
+        display: none !important;
+    }
+
+    .page-break-before {
+        page-break-before: always;
+        break-before: page;
+        float: none !important;
+        margin-top: 40px;
+    }
+
+    #layout-mainmenu,
+    #layout-sidenav,
+    #broadcamp,
+    #reutrnpreview,
+    .sigNav,
+    #name_signature,
+    #layout-sidenav-2,
+    .sidemenu,
+    .control-breadcrumb,
+    #print_button,
+    .wn-icon-chevron-left,
+    a.btn,
+    .layout-topmenu,
+    footer,
+    .hint-field {
+        display: none !important;
+        visibility: hidden;
+    }
+
+    html, body {
+        border: 1px solid white;
+        height: 99%;
+        page-break-after: avoid;
+        page-break-before: avoid;
+    }
+
+    #img-image-background {
+        display: inline !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70%;
+        opacity: 1;
+    }
+
+    body {
+        margin: 0px !important;
+        padding: 0px !important;
+        border: none;
+        zoom: 75%;
+    }
+        /* Force white background */
+        html, body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .invoice-preview-wrapper {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-height: auto !important;
+        }
+        
+        .invoice-container {
+            background: white !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 20px 25px !important;
+            margin: 0 auto !important;
+            max-width: 100% !important;
+            border: 1px solid #ddd !important;
+        }
+        
+        /* Hide print button and navigation */
+        .print-button,
+        .breadcrumb,
+        .form-preview .btn,
+        .btn-default,
+        .back-button,
+        .control-breadcrumb {
+            display: none !important;
+        }
+        
+        /* Ensure colors print correctly */
+        .document-type.payment,
+        .document-type.receipt,
+        .field-value,
+        .field-value.highlight,
+        .field-value.amount,
+        .field-value.statement,
+        .signature-box,
+        .invoice-header,
+        .invoice-divider {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+        
+        /* Remove backgrounds for print optimization */
+        .document-type.payment {
+            background: #f0faf4 !important;
+        }
+        
+        .document-type.receipt {
+            background: #fef9f0 !important;
+        }
+        
+        .field-value {
+            /* background: transparent !important; */
+        }
+        
+        .field-value.highlight {
+            /* background: #e8edf2 !important; */
+        }
+        
+        .field-value.amount {
+            /* background: #fdf0ee !important; */
+        }
+        
+        .field-value.statement {
+            /* background: #fff8e7 !important; */
+        }
+        
+        .field-value.uuid-value {
+            /* background: #ecf0f1 !important; */
+        }
+        
+        .signature-box {
+            background: transparent !important;
+            border-color: #2c3e50 !important;
+        }
+        
+        /* Force borders to print */
+        .document-type,
+        .signature-box,
+        .invoice-divider {
+            border-color: #1a3a5c !important;
+        }
+        
+        /* Ensure text colors */
+        .document-type.payment {
+            color: #27ae60 !important;
+        }
+        
+        .document-type.receipt {
+            color: #e67e22 !important;
+        }
+        
+        .field-value.amount {
+            color: #e74c3c !important;
+        }
+        
+        /* Page break handling */
+        .invoice-container {
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+        
+        /* Fix for empty signature space */
+        .signature-box .signature-space {
+            min-height: 30px !important;
+        }
+        
+        /* Ensure stamps print */
+        .signature-box .stamp-placeholder {
+            border-color: #95a5a6 !important;
+        }
+        
+        /* Font adjustments for print */
+        .invoice-container {
+            font-size: 12px !important;
+        }
+        
+        .invoice-header h1 {
+            font-size: 24px !important;
+        }
+        
+        .document-type {
+            font-size: 20px !important;
+            padding: 10px 0 !important;
+        }
+        
+        .field-value.amount {
+            font-size: 16px !important;
+        }
+        
+        /* Ensure grid works in print */
+        .invoice-fields-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8px 20px !important;
+        }
+        
+        .field-group {
+            display: flex !important;
+            align-items: center !important;
+            padding: 4px 0 !important;
+            border-bottom: 1px dashed #ecf0f1 !important;
+        }
+        
+        .field-group.full-width {
+            grid-column: 1 / -1 !important;
+        }
+        
+        .field-label {
+            min-width: 120px !important;
+            font-size: 12px !important;
+        }
+        
+        .field-value {
+            font-size: 12px !important;
+            padding: 2px 8px !important;
+        }
+        
+        /* Signatures print */
+        .signatures-section {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 30px !important;
+            margin-top: 10px !important;
+        }
+        
+        .signature-box {
+            min-height: 150px !important;
+            padding: 15px !important;
+        }
+        
+        .signature-box .stamp-placeholder {
+            width: 60px !important;
+            height: 60px !important;
+        }
+        
+        /* Fix for page margins */
+        @page {
+            margin: 10mm 15mm !important;
+            size: A4 portrait !important;
+        }
+        
+        /* Ensure footer stays in place */
+        .uuid-section {
+            margin-top: 15px !important;
+            padding: 8px !important;
+            background: #f8f9fa !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+    }
+    
+    /* ===== UUID Section ===== */
+    .uuid-section {
+        text-align: center;
+        margin: 20px 0 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        color: #7f8c8d;
+        direction: ltr;
+    }
+    
+    .uuid-section i {
+        margin-left: 8px;
+    }
+/* ===== Background Image ===== */
+#img-image-background {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    opacity: 0.1;
+    z-index: 0;
+    pointer-events: none;
+    display: block !important;
+}
+
+.invoice-container {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* ===== For Print ===== */
+@media print {
+    #img-image-background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        opacity: 0.15;
+        z-index: 0;
+        display: block !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .invoice-container {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    /* Ensure content stays above background */
+    .invoice-container > * {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+
+    
+</style>
+
+<div class="invoice-preview-wrapper">
+
+
+    <!-- Print Button -->
+    <div class="print-button">
+        <button onclick="window.print()" class="btn-print">
+            <i class="icon-print"></i> طباعة الفاتورة
+        </button>
+    </div>
+    
+    <div class="invoice-container" id="invoice-print-area">
+
+<img src="<?= e(Backend\Models\BrandSetting::getFavicon()) ?>" id="img-image-background" alt="">
+
+        <!-- ===== HEADER ===== -->
+        <div class="invoice-header">
+                <img src="<?= e(Backend\Models\BrandSetting::getFavicon()) ?>" style="width: 10%; height: 10;" class="icon-university" id="" alt="">           
+        </div>
+        
+        <!-- ===== DOCUMENT TYPE ===== -->
+        <div class="document-type <?= $formModel->type == 'payment' ? 'payment' : 'receipt' ?>">
+            <span class="type-icon">
+                <?php if ($formModel->type == 'payment'): ?>
+                    <i class="icon-credit-card"></i>
+                <?php else: ?>
+                    <i class="icon-receipt"></i>
+                <?php endif; ?>
+            </span>
+            <?php if ($formModel->type == 'payment'): ?>
+                سند صرف
+            <?php else: ?>
+                سند قبض
+            <?php endif; ?>
+            <span class="doc-number">#<?= str_pad($formModel->id, 5, '0', STR_PAD_LEFT) ?></span>
+        </div>
+        
+        <!-- ===== FIELDS GRID ===== -->
+        <div class="invoice-fields-grid">
+            <!-- Field 1 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-building"></i> <?= e(trans('finance.finance::lang.model.invoice.center')) ?>:</span>
+                <span class="field-value highlight"><?= e($formModel->center->name ?? '---') ?></span>
+            </div>
+            
+            <!-- Field 2 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-tag"></i> <?= e(trans('finance.finance::lang.model.invoice.model_type')) ?>:</span>
+                <span class="field-value highlight"><?= e($formModel->model_type->name ?? '---') ?></span>
+            </div>
+            
+            <!-- Field 3 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-arrow-left"></i> <?= e(trans('finance.finance::lang.model.invoice.payment_from')) ?>:</span>
+                <span class="field-value"><?= e($formModel->payment_from ?? '---') ?></span>
+            </div>
+            
+            <!-- Field 4 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-arrow-right"></i> <?= e(trans('finance.finance::lang.model.invoice.payment_to')) ?>:</span>
+                <span class="field-value"><?= e($formModel->payment_to ?? '---') ?></span>
+            </div>
+            
+            <!-- Field 5 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-money"></i> <?= e(trans('finance.finance::lang.model.invoice.currency')) ?>:</span>
+                <span class="field-value currency-<?= $formModel->currency ?? 'dollar' ?>">
+                    <?php if ($formModel->currency == 'dollar'): ?>
+                        <i class="icon-dollar"></i> <?= e(trans('finance.finance::lang.model.invoice.dollar')) ?>
+                    <?php else: ?>
+                        <i class="icon-money"></i> <?= e(trans('finance.finance::lang.model.invoice.syrian')) ?>
+                    <?php endif; ?>
+                </span>
+            </div>
+            
+            <!-- Field 6: Amount -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-calculator"></i> <?= e(trans('finance.finance::lang.model.invoice.amount')) ?>:</span>
+                <span class="field-value amount">
+                    <?= number_format($formModel->amount, 2) ?>
+                    <?php if ($formModel->currency == 'dollar'): ?>
+                        $
+                    <?php else: ?>
+                        SYP
+                    <?php endif; ?>
+                </span>
+            </div>
+            
+            <!-- Field 7: Disbursement Statement -->
+            <div class="field-group full-width">
+                <span class="field-label"><i class="icon-file-text"></i> <?= e(trans('finance.finance::lang.model.invoice.disbursement_statement')) ?>:</span>
+                <span class="field-value statement">
+                    <?= e($formModel->disbursement_statement ?? '---') ?>
+                </span>
+            </div>
+            
+            <!-- Field 8 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-calendar"></i> <?= e(trans('finance.finance::lang.model.invoice.created_at')) ?>:</span>
+                <span class="field-value"><?= $formModel->created_at ? $formModel->created_at->format('d/m/Y') : '---' ?></span>
+            </div>
+            
+            <!-- Field 9 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-clock-o"></i> <?= e(trans('finance.finance::lang.model.invoice.updated_at')) ?>:</span>
+                <span class="field-value"><?= $formModel->updated_at ? $formModel->updated_at->format('d/m/Y h:i A') : '---' ?></span>
+            </div>
+            
+            <!-- Field 10: UUID -->
+            <div class="field-group full-width">
+                <span class="field-label"><i class="icon-barcode"></i> <?= e(trans('finance.finance::lang.model.invoice.uuid')) ?>:</span>
+                <span class="field-value uuid-value">
+                    <?= e($formModel->uuid ?? '---') ?>
+                </span>
+            </div>
+        </div>
+        
+        <!-- ===== DIVIDER ===== -->
+        <hr class="invoice-divider">
+        
+        <!-- ===== SIGNATURES ===== -->
+        <div class="signatures-section">
+            <!-- Treasury -->
+            <div class="signature-box">
+                <div class="signature-title">
+                    <i class="icon-stamp"></i> ختم و توقيع الصندوق
+                </div>
+              
+            </div>
+            
+            <!-- Authorized -->
+            <div class="signature-box">
+                <div class="signature-title">
+                    <i class="icon-legal"></i> توقيع السيد
+                </div>
+               
+            </div>
+        </div>
+        
+        <!-- ===== UUID ===== -->
+        <div class="uuid-section">
+            <i class="icon-qrcode"></i>
+            <?= e(trans('finance.finance::lang.model.invoice.uuid')) ?>: <?= e($formModel->uuid ?? '---') ?>
+        </div>
+    </div>
+</div>
+
+<?php else: ?>
+    <p class="flash-message static error"><?= e($this->fatalError) ?></p>
+<?php endif ?>
+
+<p style="margin-top: 20px;">
+    <a href="<?= Backend::url('finance/finance/invoices') ?>" class="btn btn-default wn-icon-chevron-left">
+        <?= e(trans('backend::lang.form.return_to_list')) ?>
+    </a>
+</p>
+

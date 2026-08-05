@@ -1,0 +1,13 @@
+list: $/finance/finance/models/center/columns.yaml
+modelClass: Finance\Finance\Models\Center
+title: 'finance.finance::lang.controller.centers.centers'
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'finance/finance/centers/update/:id'
+filter: config_filter.yaml

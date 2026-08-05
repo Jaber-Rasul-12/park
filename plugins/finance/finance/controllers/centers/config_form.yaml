@@ -1,0 +1,10 @@
+name: 'finance.finance::lang.controller.centers.centers'
+form: $/finance/finance/models/center/fields.yaml
+modelClass: Finance\Finance\Models\Center
+defaultRedirect: finance/finance/centers
+create:
+    redirect: 'finance/finance/centers/update/:id'
+    redirectClose: finance/finance/centers
+update:
+    redirect: finance/finance/centers
+    redirectClose: finance/finance/centers

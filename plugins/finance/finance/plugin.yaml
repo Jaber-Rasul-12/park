@@ -1,0 +1,48 @@
+plugin:
+    name: 'finance.finance::lang.plugin.name'
+    description: 'finance.finance::lang.plugin.description'
+    author: Finance
+    icon: 'far icon-address-card'
+    replaces: {  }
+permissions:
+    finance_menu:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.finance_menu'
+    centers:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.centers'
+    types:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.types'
+    invoices:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.invoices'
+    log_changes_finance:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.log_changes_finance'
+navigation:
+    finance_menu:
+        label: 'finance.finance::lang.plugin.finance_menu'
+        url: finance/finance/centers
+        icon: icon-university
+        permissions:
+            - finance_menu
+        sideMenu:
+            centers:
+                label: 'finance.finance::lang.plugin.centers'
+                url: finance/finance/centers
+                icon: icon-building
+                permissions:
+                    - centers
+            types:
+                label: 'finance.finance::lang.plugin.types'
+                url: finance/finance/controllertypes
+                icon: icon-tags
+                permissions:
+                    - types
+            invoices:
+                label: 'finance.finance::lang.plugin.invoices'
+                url: finance/finance/invoices
+                icon: icon-file-invoice
+                permissions:
+                    - invoices

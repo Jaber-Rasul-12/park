@@ -1,0 +1,70 @@
+<?php
+
+return [
+    'plugin' => [
+        'name' => 'المالية',
+        'description' => '',
+        'finance_menu' => 'المالية',
+        'centers' => 'المراكز',
+        'types' => 'أنواع الصرف',
+        'invoices' => 'الفواتير',
+        'select' => 'اختر',
+        'log_changes_finance' => 'سجل التغييرات المالية',
+        'save_and_print' => 'حفظ وطباعة',
+        'create_and_new' => 'إنشاء و جديد',
+        'create_and_print' => 'إنشاء و طباعة',
+        'print' => 'طباعة',
+        'message_delete' => 'لا يمكن الحذف بسبب وجود سجلات مرتبطة بهذا القسم.',
+        'published_at' => 'تاريخ النشر',
+        'daily_fund_movement' => 'حركة الصندوق اليومية',
+         'total_amount'=>'المبلغ الكلي',
+         'all_transactions'=>'جميع المعاملات',
+         'total_payments'=>'مجموع سندات الصرف',
+         'total_receipts'=>'مجموع سندات القبض',
+         'transactions'=>'المعاملات',
+         'todays_date'=>'تاريخ اليوم',
+    ],
+    'model' => [
+        'invoice' => [
+            'id' => 'المعرف',
+            'model_type' => 'نوع الصرف',
+            'center' => 'المركز',
+            'type' => 'نوع السند',
+            'payment_from' => 'تم صرف للسيد',
+            'payment_to' => 'من',
+            'currency' => 'العملة',
+            'amount' => 'مبلغ مالي قدرة',
+            'disbursement_statement' => 'بيان الصرف',
+            'uuid' => 'ذو الرقم',
+            'payment' => 'دفع',
+            'receipt' => 'قبض',
+            'dollar' => 'دولار',
+            'syrian' => 'ليرة سورية',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+        ],
+        'modeltype' => [
+            'id' => 'المعرف',
+            'name' => 'الاسم',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+        ],
+        'center' => [
+            'id' => 'المعرف',
+            'name' => 'الاسم',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+        ],
+    ],
+    'controller' => [
+        'centers' => [
+            'centers' => 'المراكز',
+        ],
+        'controllertypes' => [
+            'controllertypes' => 'أنواع الصرف',
+        ],
+        'invoices' => [
+            'invoices' => 'الفواتير',
+        ],
+    ],
+];

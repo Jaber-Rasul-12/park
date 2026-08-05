@@ -1,0 +1,12 @@
+fields:
+    name:
+        label: 'finance.finance::lang.model.center.name'
+        span: auto
+        type: text
+    _logbook@update:
+            type: jacob_logbook_log
+            limitPerPage: 10 
+            startPage: 1 
+            permissions: log_changes_finance
+            showUndoChangesButton: true 
+            refreshFormAfterUndo: true 

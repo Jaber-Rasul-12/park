@@ -1,0 +1,10 @@
+name: 'finance.finance::lang.controller.invoices.invoices'
+form: $/finance/finance/models/invoice/fields.yaml
+modelClass: Finance\Finance\Models\Invoice
+defaultRedirect: finance/finance/invoices
+create:
+    redirect: 'finance/finance/invoices/update/:id'
+    redirectClose: finance/finance/invoices
+update:
+    redirect: finance/finance/invoices
+    redirectClose: finance/finance/invoices

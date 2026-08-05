@@ -1,0 +1,336 @@
+<div class="daily-fund-movement">
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <?php 
+        $totalAmount = $invoices->sum('amount');
+        $totalPayments = $invoices->where('type', 'payment')->sum('amount');
+        $totalReceipts = $invoices->where('type', 'receipt')->sum('amount');
+        $paymentCount = $invoices->where('type', 'payment')->count();
+        $receiptCount = $invoices->where('type', 'receipt')->count();
+        ?>
+        
+        <div class="col-md-3">
+            <div class="stat-card stat-card-primary">
+                <div class="stat-card-icon">
+                    <i class="wn-icon-money"></i>
+                </div>
+                <div class="stat-card-content">
+                    <span class="stat-card-label"> <?=  e(trans('finance.finance::lang.plugin.total_amount')) ?></span>
+                    <h3 class="stat-card-value"><?= number_format($totalAmount, 2) ?></h3>
+                    <span class="stat-card-sub"> <?=  e(trans('finance.finance::lang.plugin.all_transactions')) ?> </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card stat-card-success">
+                <div class="stat-card-icon">
+                    <i class="wn-icon-arrow-up"></i>
+                </div>
+                <div class="stat-card-content">
+                    <span class="stat-card-label"> <?=  e(trans('finance.finance::lang.plugin.total_payments')) ?> </span>
+                    <h3 class="stat-card-value"><?= number_format($totalPayments, 2) ?></h3>
+                    <span class="stat-card-sub"><?= $paymentCount ?>   <?=  e(trans('finance.finance::lang.plugin.transactions')) ?></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card stat-card-info">
+                <div class="stat-card-icon">
+                    <i class="wn-icon-arrow-down"></i>
+                </div>
+                <div class="stat-card-content">
+                    <span class="stat-card-label"> <?=  e(trans('finance.finance::lang.plugin.total_receipts')) ?> </span>
+                    <h3 class="stat-card-value"><?= number_format($totalReceipts, 2) ?></h3>
+                    <span class="stat-card-sub"><?= $receiptCount ?>  <?=  e(trans('finance.finance::lang.plugin.transactions')) ?> </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card stat-card-warning">
+                <div class="stat-card-icon">
+                    <i class="wn-icon-calendar"></i>
+                </div>
+                <div class="stat-card-content">
+                    <span class="stat-card-label">  <?=  e(trans('finance.finance::lang.plugin.todays_date')) ?> </span>
+                    <h3 class="stat-card-value"><?= date('d M Y') ?></h3>
+                    <span class="stat-card-sub"><?= date('l') ?></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!-- CSS -->
+<style>
+.daily-fund-movement {
+    padding: 20px 0;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.stat-card-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 24px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.stat-card-primary .stat-card-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card-success .stat-card-icon {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.stat-card-info .stat-card-icon {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.stat-card-warning .stat-card-icon {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+
+.stat-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-card-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat-card-value {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.stat-card-sub {
+    font-size: 12px;
+    color: #a0aec0;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 2px solid #f7fafc;
+    padding: 18px 25px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.card-title i {
+    margin-right: 8px;
+    color: #667eea;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* Table */
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 12px 15px;
+}
+
+.table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f7fafc;
+}
+
+.transaction-row {
+    transition: all 0.2s ease;
+}
+
+.transaction-row:hover {
+    transform: scale(1.01);
+}
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.badge-success {
+    background: #48bb78;
+    color: #fff;
+}
+
+.badge-info {
+    background: #4299e1;
+    color: #fff;
+}
+
+.badge-light {
+    background: #edf2f7;
+    color: #4a5568;
+}
+
+.badge-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+/* Footer */
+tfoot {
+    font-weight: 600;
+    background-color: #f7fafc;
+}
+
+/* Buttons */
+.btn-group .btn {
+    border-radius: 6px;
+    margin: 0 3px;
+}
+
+.btn-outline-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+.btn-outline-success {
+    border-color: #48bb78;
+    color: #48bb78;
+}
+
+.btn-outline-success:hover {
+    background: #48bb78;
+    color: #fff;
+}
+
+.btn-outline-info {
+    border-color: #4299e1;
+    color: #4299e1;
+}
+
+.btn-outline-info:hover {
+    background: #4299e1;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stat-card {
+        margin-bottom: 15px;
+    }
+    
+    .stat-card-value {
+        font-size: 20px;
+    }
+    
+    .table-responsive {
+        font-size: 14px;
+    }
+    
+    .btn-group .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-weight-bold {
+    font-weight: 700;
+}
+
+.text-success {
+    color: #48bb78;
+}
+
+.text-info {
+    color: #4299e1;
+}
+
+.table-active {
+    background-color: #f7fafc;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.align-items-center {
+    align-items: center;
+}
+</style>
+
+<!-- JavaScript for filtering -->
+<script>
+function filterTable(type) {
+    var rows = document.querySelectorAll('.transaction-row');
+    rows.forEach(function(row) {
+        if (type === 'all' || row.dataset.type === type) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>

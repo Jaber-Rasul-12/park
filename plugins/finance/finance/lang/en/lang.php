@@ -1,0 +1,70 @@
+<?php
+
+return [
+    'plugin' => [
+        'name' => 'Finance',
+        'description' => '',
+        'finance_menu' => 'Finance',
+        'centers' => 'Centers',
+        'types' => 'Types',
+        'invoices' => 'Invoices',
+        'select' => 'Select',
+        'log_changes_finance' => 'Log Changes Finance',
+        'save_and_print' => 'Save and Print',
+        'create_and_new' => 'Create and New',
+        'create_and_print' => 'Create and Print',
+        'print' => 'Print',
+         'message_delete' => 'Deletion is not possible due to the presence of records associated with the section.',
+         'published_at' => 'Published At',
+         'daily_fund_movement' => 'Daily Fund Movement',
+         'total_amount'=>'Total amount',
+         'all_transactions'=>'All transactions',
+         'total_payments'=>'Total payments',
+         'total_receipts'=>'Total receipts',
+         'transactions'=>'Transactions',
+         'todays_date'=>'Today S date',
+    ],
+    'model' => [
+        'invoice' => [
+            'id' => 'Id',
+            'model_type' => 'Model Type',
+            'center' => 'Center',
+            'type' => 'Type',
+            'payment_from' => 'Payment from',
+            'payment_to' => 'Payment to',
+            'currency' => 'Currency',
+            'amount' => 'Amount',
+            'disbursement_statement' => 'Disbursement statement',
+            'uuid' => 'Uuid',
+            'payment'=>'Payment',
+            'receipt'=>'Receipt',
+            'dollar'=>'Dollar',
+            'syrian'=>'Syrian',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+        ],
+        'modeltype' => [
+            'id' => 'Id',
+            'name' => 'Name',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+        ],
+        'center' => [
+            'id' => 'Id',
+            'name' => 'Name',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
+        ],
+    ],
+    'controller' => [
+        'centers' => [
+            'centers' => 'Centers',
+        ],
+        'controllertypes' => [
+            'controllertypes' => 'Controllertypes',
+        ],
+        'invoices' => [
+            'invoices' => 'Invoices',
+        ],
+    ],
+];

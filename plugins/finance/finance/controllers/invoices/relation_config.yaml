@@ -1,0 +1,20 @@
+model_type:
+    label: 'finance.finance::lang.model.invoice.model_type'
+    view:
+        form: $/finance/finance/models/modeltype/fields.yaml
+        toolbarButtons: create|add|link|update|delete|refresh
+    manage:
+        form: $/finance/finance/models/modeltype/fields.yaml
+        list: $/finance/finance/models/modeltype/columns.yaml
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+center:
+    label: 'finance.finance::lang.model.invoice.center'
+    view:
+        form: $/finance/finance/models/center/fields.yaml
+        toolbarButtons: create|add|link|update|delete|refresh
+    manage:
+        form: $/finance/finance/models/center/fields.yaml
+        list: $/finance/finance/models/center/columns.yaml

@@ -1,0 +1,55 @@
+fields:
+    center:
+        label: 'finance.finance::lang.model.invoice.center'
+        span: auto
+        type: relationmanager
+    type:
+        label: 'finance.finance::lang.model.invoice.type'
+        span: auto
+        type: dropdown
+        placeholder: finance.finance::lang.plugin.select
+        options:
+            payment: 'finance.finance::lang.model.invoice.payment'
+            receipt: 'finance.finance::lang.model.invoice.receipt'
+    type_id:
+        label: 'finance.finance::lang.model.invoice.model_type'
+        span: auto
+        type: dropdown
+        dependsOn: type
+    payment_from:
+        label: 'finance.finance::lang.model.invoice.payment_from'
+        span: auto
+        type: text
+    payment_to:
+        label: 'finance.finance::lang.model.invoice.payment_to'
+        span: auto
+        type: text
+    currency:
+        label: 'finance.finance::lang.model.invoice.currency'
+        span: auto
+        placeholder: finance.finance::lang.plugin.select
+        type: dropdown
+        options:
+            dollar: 'finance.finance::lang.model.invoice.dollar'
+            syrian: 'finance.finance::lang.model.invoice.syrian'
+    amount:
+        label: 'finance.finance::lang.model.invoice.amount'
+        span: auto
+        type: number
+    disbursement_statement:
+        label: 'finance.finance::lang.model.invoice.disbursement_statement'
+        span: auto
+        type: text
+    uuid:
+        label: 'finance.finance::lang.model.invoice.uuid'
+        span: auto
+        type: text
+        readOnly: true
+        context: ['update' , 'preview']
+    _logbook@update:
+            type: jacob_logbook_log
+            limitPerPage: 10 
+            startPage: 1 
+            permissions: log_changes_finance
+            showUndoChangesButton: true 
+            refreshFormAfterUndo: true 

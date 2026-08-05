@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: 'finance.finance::lang.model.modeltype.id'
+        type: number
+    name:
+        label: 'finance.finance::lang.model.modeltype.name'
+        type: text
+        searchable: true
+    type_lists:
+        label: 'finance.finance::lang.model.invoice.type'
+        type: text
+        sortable: false
+    created_at:
+        label: 'finance.finance::lang.model.modeltype.created_at'
+        type: datetime
+    updated_at:
+        label: 'finance.finance::lang.model.modeltype.updated_at'
+        type: datetime

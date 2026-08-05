@@ -1,0 +1,10 @@
+name: 'finance.finance::lang.controller.controllertypes.controllertypes'
+form: $/finance/finance/models/modeltype/fields.yaml
+modelClass: Finance\Finance\Models\ModelType
+defaultRedirect: finance/finance/controllertypes
+create:
+    redirect: 'finance/finance/controllertypes/update/:id'
+    redirectClose: finance/finance/controllertypes
+update:
+    redirect: finance/finance/controllertypes
+    redirectClose: finance/finance/controllertypes

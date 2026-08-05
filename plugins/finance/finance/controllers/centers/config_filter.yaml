@@ -1,0 +1,20 @@
+scopes:
+
+    created_at:
+        label: finance.finance::lang.model.center.created_at
+        type: date
+        conditions: created_at >= ':filtered'
+    published_at:
+        label: finance.finance::lang.plugin.published_at
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
+
+    
+
+
+
+
+
+
+
+

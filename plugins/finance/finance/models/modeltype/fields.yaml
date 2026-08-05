@@ -1,0 +1,20 @@
+fields:
+    name:
+        label: 'finance.finance::lang.model.modeltype.name'
+        span: auto
+        type: text
+    type:
+        label: 'finance.finance::lang.model.invoice.type'
+        span: auto
+        type: dropdown
+        placeholder: finance.finance::lang.plugin.select
+        options:
+            payment: 'finance.finance::lang.model.invoice.payment'
+            receipt: 'finance.finance::lang.model.invoice.receipt'
+    _logbook@update:
+            type: jacob_logbook_log
+            limitPerPage: 10 
+            startPage: 1 
+            permissions: log_changes_finance
+            showUndoChangesButton: true 
+            refreshFormAfterUndo: true 

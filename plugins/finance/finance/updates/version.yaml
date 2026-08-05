@@ -1,0 +1,11 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table finance_finance_centers'
+    - builder_table_create_finance_finance_centers.php
+1.0.3:
+    - 'Created table finance_finance_types'
+    - builder_table_create_finance_finance_types.php
+1.0.4:
+    - 'Created table finance_finance_invoices'
+    - builder_table_create_finance_finance_invoices.php
