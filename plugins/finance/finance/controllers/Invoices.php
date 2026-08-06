@@ -29,11 +29,9 @@ class Invoices extends Controller
 
            public function formGetRedirectUrl($context = null, $model = null)
     {
-        $url = post('url');
-
-
+               $url = post('url');
         if (($url == 'create') && !empty($url)) {
-            return "finance/finance/invoices";
+            return "finance/finance/invoices/create";
         }else if (($url == 'preview') && !empty($url)) {
             return "finance/finance/invoices/$url/$model->id";
         }else {
