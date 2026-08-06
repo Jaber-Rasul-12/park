@@ -45,7 +45,7 @@
                 <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd; direction: ltr;">
                     <code><?= $invoice->type ?  e(trans('finance.finance::lang.model.invoice.'.$invoice->type))  : '-' ?></code>
                 </td>
-                <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd;"><?= $invoice->type->name ?? '-' ?></td>
+                <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd;"><?= $invoice->model_type->name ?? '-' ?></td>
                 <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ddd;">
                     <span class="badge badge-warning"><?= $invoice->payment_from ?? '-' ?></span>
                 </td>
