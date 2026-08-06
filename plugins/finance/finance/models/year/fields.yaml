@@ -1,0 +1,9 @@
+fields:
+    name:
+        label: 'finance.finance::lang.model.year.name'
+        span: auto
+        type: text
+    status:
+        label: 'finance.finance::lang.model.year.status'
+        span: auto
+        type: switch

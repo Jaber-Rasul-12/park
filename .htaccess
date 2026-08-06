@@ -30,7 +30,7 @@
     RewriteRule ^storage/framework/.* index.php [L,NC]
     RewriteRule ^storage/temp/protected/.* index.php [L,NC]
     RewriteRule ^storage/app/uploads/protected/.* index.php [L,NC]
-
+    
     ##
     ## Paths explicitly handled by the server
     ##

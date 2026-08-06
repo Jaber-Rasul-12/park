@@ -22,6 +22,10 @@ class BuilderTableCreateFinanceFinanceInvoices extends Migration
             $table->integer('center_id')->unsigned();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
+            $table->integer('year_id')->unsigned();    
+            $table->foreign('year_id')->references('id')->on('finance_finance_years')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('month_id')->unsigned();    
+            $table->foreign('month_id')->references('id')->on('finance_finance_months')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('type_id')
                         ->references('id')
                         ->on('finance_finance_types')

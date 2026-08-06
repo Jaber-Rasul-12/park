@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: 'finance.finance::lang.model.year.id'
+        type: number
+    name:
+        label: 'finance.finance::lang.model.year.name'
+        type: text
+        searchable: true
+    status:
+        label: finance.finance::lang.model.year.status
+        type: jaber-list-switch
+        icon: true
+        text-color: true
+        font-size: 20
+    user[fullName]:
+        label: finance.finance::lang.plugin.user
+        permissions: center_permision_user
+    created_at:
+        label: 'finance.finance::lang.model.year.created_at'
+        type: datetime
+    updated_at:
+        label: 'finance.finance::lang.model.year.updated_at'
+        type: datetime

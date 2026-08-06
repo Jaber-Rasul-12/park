@@ -32,15 +32,19 @@ class Invoice extends Model
         'amount'                => 'required|numeric|min:0',
         'disbursement_statement' => 'required|string|max:255',
         'uuid'                  => 'required|string|uuid',
-        // 'type_id'               => 'required|integer|exists:finance_finance_types,id',
-        // 'center_id'             => 'required|integer|exists:finance_finance_centers,id',
+        'year_id'         => 'required|exists:finance_finance_years,id',
+        'month_id'         => 'required|exists:finance_finance_months,id',
     ];
 
 
         public $belongsTo = [
         'model_type' => ['Finance\Finance\Models\ModelType', 'key' => 'type_id'],
-        'center' => ['Finance\Finance\Models\Center', 'key' => 'center_id'],
+        'center' => ['Finance\Finance\Models\Center', 'key' => 'center_id'],    
+        'month'        => ['Finance\Finance\Models\Month', 'key' => 'month_id'],
+        'year'        => ['Finance\Finance\Models\Year', 'key' => 'year_id'],
     ];
+
+
 
       /**
    * Generates a UUID before creating the model record.
@@ -83,6 +87,24 @@ class Invoice extends Model
    public function getCurrencyListsAttribute()
   {
     return trans('finance.finance::lang.model.invoice.' . $this->attributes['currency']);
+  }
+
+    public function getMonthOptions($scopes = null)
+  {
+    if (!empty($scopes['year']->value)) {
+      return Month::whereIn('year_id', array_keys($scopes['year']->value))->get()->lists('name', 'id');
+    } else {
+      return [];
+    }
+  }
+
+       public function getMonthIdOptions()
+  {
+    if (isset($this->year) && !empty($this->year->id)) {
+      return Month::where('year_id', $this->year->id)->where('status' , true)->get()->lists('name', 'id');
+    } else {
+      return [];
+    }
   }
   
 

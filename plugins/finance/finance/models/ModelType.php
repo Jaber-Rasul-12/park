@@ -12,9 +12,6 @@ use Jacob\Logbook\Traits\LogChanges;
 class ModelType extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
-    
-   
-
     use LogChanges;
   public $logBookModelName = 'finance.finance::lang.plugin.types';
   public static function changeLogBookDisplayColumn($column)

@@ -7,5 +7,11 @@
     - 'Created table finance_finance_types'
     - builder_table_create_finance_finance_types.php
 1.0.4:
+    - 'Created table builder_table_create_finance_finance_years'
+    - builder_table_create_finance_finance_years.php
+1.0.5:
+    - 'Created table builder_table_create_finance_finance_months'
+    - builder_table_create_finance_finance_months.php
+1.0.6:
     - 'Created table finance_finance_invoices'
     - builder_table_create_finance_finance_invoices.php

@@ -1,5 +1,5 @@
 <div data-control="toolbar">
-        <a href="<?= Backend::url('finance/finance/invoices/create') ?>" class="btn btn-primary wn-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
+        <a href="<?= Backend::url('finance/finance/years/create') ?>" class="btn btn-primary wn-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
             <button
         class="btn btn-default wn-icon-trash-o"
         disabled="disabled"
@@ -15,14 +15,4 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
-
-<button
-    class="btn btn-primary wn-icon-money"
-    data-request="onDailyFundMovement"
-    data-stripe-load-indicator>
-    <?= e(trans('finance.finance::lang.plugin.daily_fund_movement')) ?>
-</button>
-
- <a href="<?= Backend::url('finance/finance/invoices/reports') ?>" class="btn btn-primary wn-icon-print"><?= e(trans('finance.finance::lang.plugin.print_tables')) ?></a>
-
 </div>

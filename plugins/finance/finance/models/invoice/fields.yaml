@@ -3,6 +3,18 @@ fields:
         label: 'finance.finance::lang.model.invoice.center'
         span: auto
         type: relationmanager
+    year:
+        label: 'finance.finance::lang.plugin.years'
+        span: auto
+        type: relation 
+        select: name
+        placeholder: finance.finance::lang.plugin.select
+    month_id:
+        label: 'finance.finance::lang.plugin.months'
+        span: auto
+        type: dropdown
+        placeholder: finance.finance::lang.plugin.select
+        dependsOn: year
     type:
         label: 'finance.finance::lang.model.invoice.type'
         span: auto

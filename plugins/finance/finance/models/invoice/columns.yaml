@@ -9,6 +9,16 @@ columns:
         clickable: false
         sortable: false
         searchable: false
+    year:
+        label: 'finance.finance::lang.plugin.years'
+        relation: year
+        select:  name
+        searchable: true
+    month:
+        label: 'finance.finance::lang.plugin.months'
+        relation: month
+        select:  name
+        searchable: true
     model_type:
         label: 'finance.finance::lang.model.invoice.model_type'
         relation: model_type

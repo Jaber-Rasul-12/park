@@ -1,0 +1,4 @@
+<option value=""><?= e(trans('finance.finance::lang.plugin.select')) ?></option>
+<?php foreach ($months as $month): ?>
+    <option value="<?= $month->id ?>"><?= $month->name ?></option>
+<?php endforeach; ?>

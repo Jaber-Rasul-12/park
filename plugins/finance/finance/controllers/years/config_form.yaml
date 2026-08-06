@@ -1,0 +1,10 @@
+name: 'finance.finance::lang.controller.years.years'
+form: $/finance/finance/models/year/fields.yaml
+modelClass: Finance\Finance\Models\Year
+defaultRedirect: finance/finance/years
+create:
+    redirect: 'finance/finance/years/update/:id'
+    redirectClose: finance/finance/years
+update:
+    redirect: finance/finance/years
+    redirectClose: finance/finance/years

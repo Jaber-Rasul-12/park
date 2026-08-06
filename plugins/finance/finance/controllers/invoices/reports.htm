@@ -1,0 +1,209 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('finance/finance/invoices') ?>"><?= e(trans('finance.finance::lang.controller.invoices.invoices')) ?></a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<form id="layout">
+    <div style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; padding: 20px; background: #f8f9fa; border-radius: 8px; margin-bottom: 20px;">
+        
+        <div style="min-width: 200px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #495057;">السنوات</label>
+            <select name="year_id" data-request="onGetMonths"
+                    data-ajax-delay="300" class="form-control custom-select" style="width: 100%;">
+                              <option value=""><?= e(trans('finance.finance::lang.plugin.select')) ?></option>
+
+                
+                    <?php foreach($yearsOptions as $year){ ?>
+                <option value="<?= $year->id ?>"><?= $year->name ?></option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div style="min-width: 200px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #495057;">الاشهر</label>
+            <select name="month_id" id="monthSelect" class="form-control custom-select" style="width: 100%;">
+               
+            </select>
+        </div>
+
+        <div style="min-width: 200px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #495057;">العملة</label>
+            <select name="currency"  class="form-control custom-select" style="width: 100%;">
+                    <option value=""><?= e(trans('finance.finance::lang.plugin.select')) ?></option>
+                    <option value="dollar"><?= e(trans('finance.finance::lang.model.invoice.dollar')) ?></option>
+                    <option value="syrian"><?= e(trans('finance.finance::lang.model.invoice.syrian')) ?></option>
+            </select>
+        </div>
+
+
+        <div style="min-width: 150px; display: flex; gap: 10px; align-items: flex-end; margin-top: 20px;">
+            <button type="submit" data-request="onFilterReports" data-stripe-load-indicator class="btn btn-primary" style="padding: 8px 30px;">
+                <i class="fa fa-filter"></i> فلترة
+            </button>
+            <button type="button" 
+onclick='window.print()' data-hotkey='ctrl+p'
+                    class="btn btn-success" 
+                    style="padding: 8px 30px;">
+                <i class="fa fa-print"></i> طباعة
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ====== بداية الإحصائيات ====== -->
+<div id="statistics-container" style="margin-bottom: 20px;">
+    <?php if(isset($statistics) && count($statistics) > 0): ?>
+        <!-- بطاقة الملخص العام -->
+        <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+            <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                <div style="font-size: 14px; opacity: 0.8;">إجمالي الفواتير</div>
+                <div style="font-size: 28px; font-weight: 700;"><?= $statistics['total_invoices'] ?? 0 ?></div>
+            </div>
+            <div class="summary-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);">
+                <div style="font-size: 14px; opacity: 0.8;">إجمالي المدفوعات</div>
+                <div style="font-size: 28px; font-weight: 700;"><?= number_format($statistics['total_payments'] ?? 0, 2) ?></div>
+            </div>
+            <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);">
+                <div style="font-size: 14px; opacity: 0.8;">إجمالي المقبوضات</div>
+                <div style="font-size: 28px; font-weight: 700;"><?= number_format($statistics['total_receipts'] ?? 0, 2) ?></div>
+            </div>
+            <div class="summary-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1a2332; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);">
+                <div style="font-size: 14px; opacity: 0.8;">الرصيد في الصندوق</div>
+                <div style="font-size: 28px; font-weight: 700;"><?= number_format($statistics['balance'] ?? 0, 2) ?></div>
+            </div>
+        </div>
+
+        <!-- إحصائيات كل نموذج -->
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 25px;">
+            <h4 style="color: #2d3748; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                <i class="fa fa-bar-chart" style="color: #4f6ef7;"></i> 
+                إحصائيات حسب انواع الصرف 
+            </h4>
+            <div style="overflow-x: auto;">
+                <table class="table table-bordered table-hover" style="margin-bottom: 0;">
+                    <thead style="background: #2c3e50; color: white;">
+                        <tr>
+                            <th style="padding: 10px; text-align: center;">#</th>
+                            <th style="padding: 10px; text-align: center;">النموذج</th>
+                            <th style="padding: 10px; text-align: center;">النوع</th>
+                            <th style="padding: 10px; text-align: center;">عدد الفواتير</th>
+                            <th style="padding: 10px; text-align: center;">إجمالي المبلغ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $counter = 1; ?>
+                        <?php foreach($statistics['model_types'] ?? [] as $modelType): ?>
+                            <tr>
+                                <td style="text-align: center;"><?= $counter++ ?></td>
+                                <td style="text-align: center; font-weight: 500;"><?= e($modelType['name'] ?? '-') ?></td>
+                                <td style="text-align: center;">
+                                    <span class="badge <?= $modelType['type'] == 'payment' ? 'badge-danger' : 'badge-success' ?>">
+                                        <?= $modelType['type'] == 'payment' ? 'دفع' : 'قبض' ?>
+                                    </span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span class="badge badge-primary"><?= $modelType['count'] ?? 0 ?></span>
+                                </td>
+                                <td style="text-align: center; font-weight: 600; color: <?= $modelType['type'] == 'payment' ? '#e53e3e' : '#38a169' ?>;">
+                                    <?= number_format($modelType['total'] ?? 0, 2) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <!-- صف المجموع الكلي -->
+                        <tr style="background: #f7fafc; font-weight: 700;">
+                            <td colspan="3" style="text-align: left; padding: 10px;">
+                                <strong>المجموع الكلي</strong>
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="badge badge-dark"><?= $statistics['total_invoices'] ?? 0 ?></span>
+                            </td>
+                            <td style="text-align: center; color: #2d3748;">
+                                <?= number_format(($statistics['total_payments'] ?? 0) + ($statistics['total_receipts'] ?? 0), 2) ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+<!-- ====== نهاية الإحصائيات ====== -->
+
+<!-- ====== الجدول الرئيسي ====== -->
+<div class="table-responsive" id="body_table">
+    <?= $this->makePartial('table', ['invoices' => $invoices ?? []]) ?>
+</div>
+
+<style>
+    /* ====== ستايلات الإحصائيات ====== */
+    .summary-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: default;
+    }
+    .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    /* ====== ستايلات الطباعة ====== */
+    @media print {
+        #layout, .btn, .form-control, select, label {
+            display: none !important;
+        }
+        #statistics-container {
+            display: block !important;
+        }
+        .summary-cards {
+            page-break-inside: avoid !important;
+        }
+        .summary-card {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        #body_table {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .table {
+            font-size: 12px !important;
+        }
+        .table th, .table td {
+            padding: 5px !important;
+        }
+        .badge {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .badge-danger { background: #e53e3e !important; color: white !important; }
+        .badge-success { background: #38a169 !important; color: white !important; }
+        .badge-primary { background: #3182ce !important; color: white !important; }
+        .badge-dark { background: #2d3748 !important; color: white !important; }
+    }
+
+    /* ====== تحسين الموبايل ====== */
+    @media (max-width: 768px) {
+        .summary-cards {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+        .summary-card {
+            padding: 15px !important;
+        }
+        .summary-card div:last-child {
+            font-size: 20px !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .summary-cards {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    .control-toolbar .toolbar-item .btn,
+    .control-toolbar .toolbar-item .btn-group,
+    .control-toolbar .toolbar-item .dropdown {
+        display: none !important;
+    }
+</style>

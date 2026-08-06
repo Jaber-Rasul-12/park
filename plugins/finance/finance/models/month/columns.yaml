@@ -1,0 +1,28 @@
+columns:
+    id:
+        label: 'finance.finance::lang.model.month.id'
+        type: number
+    year:
+        label: 'finance.finance::lang.model.month.year'
+        relation: year
+        select: name
+        searchable: true
+    name:
+        label: 'finance.finance::lang.model.month.name'
+        type: text
+        searchable: true
+    status:
+        label: finance.finance::lang.model.month.status
+        type: jaber-list-switch
+        icon: true
+        text-color: true
+        font-size: 20
+    user[fullName]:
+        label: finance.finance::lang.plugin.user
+        permissions: center_permision_user
+    created_at:
+        label: 'finance.finance::lang.model.month.created_at'
+        type: datetime
+    updated_at:
+        label: 'finance.finance::lang.model.month.updated_at'
+        type: datetime

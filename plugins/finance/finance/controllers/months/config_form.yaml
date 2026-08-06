@@ -1,0 +1,10 @@
+name: 'finance.finance::lang.controller.months.months'
+form: $/finance/finance/models/month/fields.yaml
+modelClass: Finance\Finance\Models\Month
+defaultRedirect: finance/finance/months
+create:
+    redirect: 'finance/finance/months/update/:id'
+    redirectClose: finance/finance/months
+update:
+    redirect: finance/finance/months
+    redirectClose: finance/finance/months

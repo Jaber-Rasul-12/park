@@ -23,6 +23,13 @@ return [
          'total_receipts'=>'مجموع سندات القبض',
          'transactions'=>'المعاملات',
          'todays_date'=>'تاريخ اليوم',
+              'years' => 'السنوات',
+        'months' => 'الاشهر',
+        'print_tables' => 'طباعة الجداول',
+         'user' => 'المستخدم',
+                   'message_unique' => 'الاسم يجب ان يكون فريد.',
+         'error_status_save' => ' الاسم يجب ان يكون فريد.',
+
     ],
     'model' => [
         'invoice' => [
@@ -33,6 +40,8 @@ return [
             'payment_from' => 'تم صرف للسيد',
             'payment_to' => 'من',
             'currency' => 'العملة',
+             'month'=>'الشهر',
+            'year'=>'السنة',
             'amount' => 'مبلغ مالي قدرة',
             'disbursement_statement' => 'بيان الصرف',
             'uuid' => 'ذو الرقم',
@@ -55,6 +64,34 @@ return [
             'created_at' => 'تاريخ الإنشاء',
             'updated_at' => 'تاريخ التحديث',
         ],
+
+                        'year' => [
+            'id' => 'المعرف',
+            'name' => 'الاسم',
+            'status'    => 'الحالة',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+        ],
+        'month' => [
+            'id' => 'المعرف',
+            'year' => 'السنة',
+            'name' => 'الشهر',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+            'January' => 'يناير',
+            'status'    => 'الحالة',
+            'February' => 'فبراير',
+            'March' => 'مارس',
+            'April' => 'أبريل',
+            'May' => 'مايو',
+            'June' => 'يونيو',
+            'July' => 'يوليو',
+            'August' => 'أغسطس',
+            'September' => 'سبتمبر',
+            'October' => 'أكتوبر',
+            'November' => 'نوفمبر',
+            'December' => 'ديسمبر',
+        ],
     ],
     'controller' => [
         'centers' => [
@@ -65,6 +102,12 @@ return [
         ],
         'invoices' => [
             'invoices' => 'الفواتير',
+        ],
+                'years' => [
+            'years' => 'السنوات',
+        ],
+        'months' => [
+            'months' => 'الشهر',
         ],
     ],
 ];

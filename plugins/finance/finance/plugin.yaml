@@ -17,6 +17,12 @@ permissions:
     invoices:
         tab: 'finance.finance::lang.plugin.finance'
         label: 'finance.finance::lang.plugin.invoices'
+    years:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.years'
+    months:
+        tab: 'finance.finance::lang.plugin.finance'
+        label: 'finance.finance::lang.plugin.months'
     log_changes_finance:
         tab: 'finance.finance::lang.plugin.finance'
         label: 'finance.finance::lang.plugin.log_changes_finance'
@@ -34,6 +40,18 @@ navigation:
                 icon: icon-building
                 permissions:
                     - centers
+            years:
+                label: 'finance.finance::lang.plugin.years'
+                url: finance/finance/years
+                icon: icon-calendar
+                permissions:
+                    - years
+            months:
+                label: 'finance.finance::lang.plugin.months'
+                url: finance/finance/months
+                icon: icon-calendar-o
+                permissions:
+                    - months
             types:
                 label: 'finance.finance::lang.plugin.types'
                 url: finance/finance/controllertypes
