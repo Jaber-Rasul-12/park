@@ -46,6 +46,11 @@ columns:
         label: 'finance.finance::lang.model.invoice.amount'
         type: text
         searchable: true
+    amount_name:
+        label: 'finance.finance::lang.model.invoice.amount_name'
+        type: text
+
+        
     disbursement_statement:
         label: 'finance.finance::lang.model.invoice.disbursement_statement'
         type: text

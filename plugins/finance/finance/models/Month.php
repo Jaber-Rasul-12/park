@@ -21,6 +21,8 @@ class Month extends Model
   /**
    * @var string The database table used by the model.
    */
+
+  public  $fillable = ['name', 'year_id', 'status', 'user_id'];
   public $table = 'finance_finance_months';
 
   public $rules = [
@@ -70,10 +72,7 @@ class Month extends Model
     }
   }
 
-public function afterCreate()
-{
-   
-}
+
 
 
   public function beforeUpdate()

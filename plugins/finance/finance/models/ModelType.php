@@ -31,7 +31,7 @@ class ModelType extends Model
      * @var array Validation rules for the model attributes.
      */
     public $rules = [
-        'name' => 'required|string|max:255|unique:finance_finance_types,name',
+        'name' => 'required|string|max:255',
         'type'                  => 'required|string|max:255',
     ];
 
@@ -67,6 +67,33 @@ class ModelType extends Model
             }
         }
     }
+
+
+      public function beforeCreate()
+  {
+    $this->checkUniqueNameYear();
+  }
+
+
+
+
+  public function beforeUpdate()
+  {
+    if (($this->original['name'] != $this->name) || ($this->original['type'] != $this->type)) {
+      $this->checkUniqueNameYear();
+    }
+  }
+
+  protected function checkUniqueNameYear()
+  {
+    $exists = self::where('name', $this->name)
+      ->where('type', $this->type)
+      ->exists();
+
+    if ($exists) {
+      throw new \ValidationException(['name' => trans('finance.finance::lang.plugin.message_unique')]);
+    }
+  }
 
 
 }

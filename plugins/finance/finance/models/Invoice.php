@@ -1,5 +1,6 @@
 <?php namespace Finance\Finance\Models;
 
+use Finance\Finance\Classes\NumberToWords;
 use Model;
 // use Winter\Storm\Database\Builder;
 // use BackendAuth;
@@ -27,6 +28,7 @@ class Invoice extends Model
       public $rules = [
         'center_id'         => 'required|exists:finance_finance_centers,id',
         'type'                  => 'required|string|max:255',
+        'amount_name'                  => 'required|string|max:255',
         'payment_from'          => 'required|string|max:255',
         'payment_to'            => 'required|string|max:255',
         'currency'              => 'required|string|max:255',
@@ -46,6 +48,11 @@ class Invoice extends Model
     ];
 
 
+        public $attachMany = [
+        'photos' => 'System\Models\File'
+    ];
+
+
 
       /**
    * Generates a UUID before creating the model record.
@@ -56,6 +63,21 @@ class Invoice extends Model
       $this->uuid = Guid::uuid4()->toString();
     }
   }
+
+        public function filterFields($fields, $context = null)
+  {         
+      if (isset($fields->amount->value) && !empty($fields->amount->value) && isset($fields->currency->value) && !empty($fields->currency->value)) {
+                $fields->amount_name->value =  NumberToWords::convert($fields->amount->value);   
+                $fields->amount_name->value = $fields->amount_name->value . ' ' .  ($fields->currency->value == 'dollar' ? 'دولار فقط لا غير' : 'ليرة سورية فقط لا غير ');     
+
+      }else{
+            $fields->amount_name->value = '';
+
+          }
+
+
+  }
+
 
 
   public function getTypeOptions()
@@ -90,6 +112,8 @@ class Invoice extends Model
     return trans('finance.finance::lang.model.invoice.' . $this->attributes['currency']);
   }
 
+  
+
     public function getMonthOptions($scopes = null)
   {
     if (!empty($scopes['year']->value)) {
@@ -97,6 +121,11 @@ class Invoice extends Model
     } else {
       return [];
     }
+  }
+
+         public function getYearIdOptions()
+  {
+      return Year::where('status' , true)->get()->lists('name', 'id');
   }
 
        public function getMonthIdOptions()

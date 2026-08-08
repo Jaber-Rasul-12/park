@@ -16,7 +16,7 @@
     .invoice-preview-wrapper {
         direction: rtl;
         background: #f0f2f5;
-        padding: 30px;
+        padding: 2px;
         min-height: 100vh;
     }
     
@@ -24,7 +24,7 @@
         background: #ffffff;
         border-radius: 12px;
         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
-        padding: 0px 45px;
+        padding: 0px 10px;
         max-width: 1000px;
         margin: 0 auto;
         font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
@@ -196,7 +196,7 @@
     /* ===== Signatures ===== */
     .signatures-section {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 40px;
         margin-top: 2px;
         padding-top: 2px;
@@ -333,6 +333,8 @@
             font-size: 22px;
         }
     }
+
+    
     
     /* ============================================
        PRINT STYLES - CRITICAL FIX
@@ -409,7 +411,6 @@
         .invoice-preview-wrapper {
             background: white !important;
             padding: 0 !important;
-            margin: 0 !important;
             min-height: auto !important;
         }
         
@@ -417,11 +418,20 @@
             background: white !important;
             box-shadow: none !important;
             border-radius: 0 !important;
-            padding: 20px 25px !important;
+            padding: 10px 10px !important;
             margin: 0 auto !important;
             max-width: 100% !important;
             border: 1px solid #ddd !important;
         }
+
+        .layout{
+    padding: 0px!important;
+    display: flex;
+    margin: 0px!important;
+    
+}
+
+
         
         /* Hide print button and navigation */
         .print-button,
@@ -567,7 +577,7 @@
         /* Signatures print */
         .signatures-section {
             display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
+            grid-template-columns: 1fr 1fr  1fr !important;
             gap: 30px !important;
             margin-top: 10px !important;
         }
@@ -746,12 +756,19 @@
             <div class="field-group">
                 <span class="field-label"><i class="icon-calculator"></i> <?= e(trans('finance.finance::lang.model.invoice.amount')) ?>:</span>
                 <span class="field-value amount">
-                    <?= number_format($formModel->amount, 2) ?>
+                    <?= $formModel->amount ?>
                     <?php if ($formModel->currency == 'dollar'): ?>
                         $
                     <?php else: ?>
                         ل.س
                     <?php endif; ?>
+                </span>
+            </div>
+                        <!-- Field 6: Amount -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-calculator"></i> <?= e(trans('finance.finance::lang.model.invoice.amount_name')) ?>:</span>
+                <span class="field-value amount">
+                    <?= $formModel->amount_name ?>
                 </span>
             </div>
             <!-- Field 8 -->
@@ -782,20 +799,30 @@
         
         <!-- ===== SIGNATURES ===== -->
         <div class="signatures-section">
-            <!-- Treasury -->
-            <div class="signature-box">
-                <div class="signature-title">
-                    <i class="icon-stamp"></i> ختم و توقيع الصندوق
-                </div>
-              
-            </div>
-            
+
             <!-- Authorized -->
             <div class="signature-box">
                 <div class="signature-title">
                     <i class="icon-legal"></i> توقيع السيد
                 </div>
                
+            </div>
+
+        <!-- Authorized -->
+            <div class="signature-box">
+                <div class="signature-title">
+                    <i class="icon-legal"></i> ختم و توقيع المحاسب
+                </div>
+               
+            </div>
+            
+
+                        <!-- Treasury -->
+            <div class="signature-box">
+                <div class="signature-title">
+                    <i class="icon-stamp"></i> ختم و توقيع الصندوق
+                </div>
+              
             </div>
         </div>
         

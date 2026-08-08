@@ -4,18 +4,17 @@ fields:
         span: auto
         type: relation
         select: name
-    year:
+    year_id:
         label: 'finance.finance::lang.plugin.years'
         span: auto
-        type: relation 
-        select: name
+        type: dropdown 
         placeholder: finance.finance::lang.plugin.select
     month_id:
         label: 'finance.finance::lang.plugin.months'
         span: auto
         type: dropdown
         placeholder: finance.finance::lang.plugin.select
-        dependsOn: year
+        dependsOn: year_id
     type:
         label: 'finance.finance::lang.model.invoice.type'
         span: auto
@@ -49,10 +48,36 @@ fields:
         label: 'finance.finance::lang.model.invoice.amount'
         span: auto
         type: number
+    amount_name:
+        label: 'finance.finance::lang.model.invoice.amount_name'
+        span: auto
+        type: text
+        dependsOn: 
+            - amount
+            - currency
+
+
+        
     disbursement_statement:
         label: 'finance.finance::lang.model.invoice.disbursement_statement'
         span: auto
         type: text
+    photos:
+        label: finance.finance::lang.model.invoice.images
+        type: fileupload
+        span: auto
+        mode: file
+        imageHeight: 260
+        imageWidth: 260
+        thumbOptions:
+            mode: crop
+            offset:
+                - 0
+                - 0
+            quality: 90
+            sharpen: 0
+            interlace: false
+            extension: auto
     uuid:
         label: 'finance.finance::lang.model.invoice.uuid'
         span: auto

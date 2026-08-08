@@ -17,6 +17,9 @@ class BuilderTableCreateFinanceFinanceInvoices extends Migration
             $table->string('currency');
             $table->double('amount', 10, 0);
             $table->string('disbursement_statement');
+            $table->string('amount_name');
+
+            
             $table->text('uuid');
             $table->integer('type_id')->unsigned();
             $table->integer('center_id')->unsigned();
