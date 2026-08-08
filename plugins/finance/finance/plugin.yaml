@@ -29,7 +29,7 @@ permissions:
 navigation:
     finance_menu:
         label: 'finance.finance::lang.plugin.finance_menu'
-        url: finance/finance/centers
+        url: finance/finance/invoices
         icon: icon-university
         permissions:
             - finance_menu
