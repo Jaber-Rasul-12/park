@@ -25,6 +25,7 @@ class Invoice extends Model
     public $table = 'finance_finance_invoices';
 
       public $rules = [
+        'center_id'         => 'required|exists:finance_finance_centers,id',
         'type'                  => 'required|string|max:255',
         'payment_from'          => 'required|string|max:255',
         'payment_to'            => 'required|string|max:255',
@@ -106,6 +107,16 @@ class Invoice extends Model
       return [];
     }
   }
+
+
+  public function getModelTypeOptions($scopes = null)
+{
+    if (!empty($scopes['type']->value)) {
+        return ModelType::whereIn('type', array_keys($scopes['type']->value))->lists('name', 'id');
+    } else {
+        return ModelType::lists('name', 'id');
+    }
+}
   
 
 

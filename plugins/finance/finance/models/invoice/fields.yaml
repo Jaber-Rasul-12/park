@@ -2,7 +2,8 @@ fields:
     center:
         label: 'finance.finance::lang.model.invoice.center'
         span: auto
-        type: relationmanager
+        type: relation
+        select: name
     year:
         label: 'finance.finance::lang.plugin.years'
         span: auto

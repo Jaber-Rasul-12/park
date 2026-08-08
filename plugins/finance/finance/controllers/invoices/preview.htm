@@ -24,7 +24,7 @@
         background: #ffffff;
         border-radius: 12px;
         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
-        padding: 50px 45px;
+        padding: 0px 45px;
         max-width: 1000px;
         margin: 0 auto;
         font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
@@ -34,8 +34,8 @@
     .invoice-header {
         text-align: center;
         border-bottom: 3px double #1a3a5c;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
+        padding-bottom: 0px;
+        margin-bottom: 1px;
     }
     
     .invoice-header h1 {
@@ -64,8 +64,7 @@
         text-align: center;
         font-size: 24px;
         font-weight: 700;
-        padding: 15px 0;
-        margin: 10px 0 25px;
+        padding: 1px 0;
         border-bottom: 2px solid #1a3a5c;
         border-top: 2px solid #1a3a5c;
         letter-spacing: 3px;
@@ -101,7 +100,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px 30px;
-        padding: 15px 0;
+        padding: 2px 0;
         margin-bottom: 15px;
     }
     
@@ -199,8 +198,8 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 40px;
-        margin-top: 10px;
-        padding-top: 20px;
+        margin-top: 2px;
+        padding-top: 2px;
     }
     
     .signature-box {
@@ -220,8 +219,8 @@
         color: #1a3a5c;
         font-size: 15px;
         border-bottom: 1px solid #ecf0f1;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
+        padding-bottom: 2px;
+        margin-bottom: 2px;
     }
     
     .signature-box .signature-title i {
@@ -233,13 +232,13 @@
         color: #95a5a6;
         border: 2px dashed #bdc3c7;
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
+        width: 40px;
+        height: 40px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 10px auto;
+        margin: 2px auto;
         font-weight: 600;
     }
     
@@ -252,7 +251,7 @@
     .signature-box .signature-line {
         border-top: 1px solid #2c3e50;
         width: 80%;
-        margin: 15px auto 5px;
+        margin: 1px auto 5px;
         padding-top: 5px;
     }
     
@@ -264,13 +263,13 @@
     
     .signature-box .signature-space {
         min-height: 40px;
-        margin: 10px 0;
+        margin: 2px 0;
     }
     
     /* ===== Print Button ===== */
     .print-button {
         text-align: left;
-        margin-bottom: 20px;
+        margin-bottom: 2px;
     }
     
     .btn-print {
@@ -511,7 +510,7 @@
         
         /* Fix for empty signature space */
         .signature-box .signature-space {
-            min-height: 30px !important;
+            min-height: 10px !important;
         }
         
         /* Ensure stamps print */
@@ -574,7 +573,7 @@
         }
         
         .signature-box {
-            min-height: 150px !important;
+            min-height: 100px !important;
             padding: 15px !important;
         }
         
@@ -591,8 +590,8 @@
         
         /* Ensure footer stays in place */
         .uuid-section {
-            margin-top: 15px !important;
-            padding: 8px !important;
+            margin-top: 2px !important;
+            padding: 2px !important;
             background: #f8f9fa !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -603,8 +602,8 @@
     /* ===== UUID Section ===== */
     .uuid-section {
         text-align: center;
-        margin: 20px 0 0;
-        padding: 10px;
+        margin: 2px 0 0;
+        padding: 2px;
         background: #f8f9fa;
         border-radius: 6px;
         font-family: 'Courier New', monospace;
@@ -751,9 +750,20 @@
                     <?php if ($formModel->currency == 'dollar'): ?>
                         $
                     <?php else: ?>
-                        SYP
+                        ل.س
                     <?php endif; ?>
                 </span>
+            </div>
+            <!-- Field 8 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-calendar"></i> <?= e(trans('finance.finance::lang.model.invoice.created_at')) ?>:</span>
+                <span class="field-value"><?= $formModel->created_at ? $formModel->created_at->format('d/m/Y') : '---' ?></span>
+            </div>
+            
+            <!-- Field 9 -->
+            <div class="field-group">
+                <span class="field-label"><i class="icon-clock-o"></i> <?= e(trans('finance.finance::lang.model.invoice.uuid')) ?>:</span>
+                <span class="field-value uuid-value"><?= $formModel->uuid ?></span>
             </div>
             
             <!-- Field 7: Disbursement Statement -->
@@ -764,25 +774,7 @@
                 </span>
             </div>
             
-            <!-- Field 8 -->
-            <div class="field-group">
-                <span class="field-label"><i class="icon-calendar"></i> <?= e(trans('finance.finance::lang.model.invoice.created_at')) ?>:</span>
-                <span class="field-value"><?= $formModel->created_at ? $formModel->created_at->format('d/m/Y') : '---' ?></span>
-            </div>
-            
-            <!-- Field 9 -->
-            <div class="field-group">
-                <span class="field-label"><i class="icon-clock-o"></i> <?= e(trans('finance.finance::lang.model.invoice.updated_at')) ?>:</span>
-                <span class="field-value"><?= $formModel->updated_at ? $formModel->updated_at->format('d/m/Y h:i A') : '---' ?></span>
-            </div>
-            
-            <!-- Field 10: UUID -->
-            <div class="field-group full-width">
-                <span class="field-label"><i class="icon-barcode"></i> <?= e(trans('finance.finance::lang.model.invoice.uuid')) ?>:</span>
-                <span class="field-value uuid-value">
-                    <?= e($formModel->uuid ?? '---') ?>
-                </span>
-            </div>
+
         </div>
         
         <!-- ===== DIVIDER ===== -->

@@ -7,11 +7,6 @@ scopes:
         label: finance.finance::lang.plugin.published_at
         type: daterange
         conditions: created_at >= ':after' AND created_at <= ':before'
-    model_type:
-        label: finance.finance::lang.model.invoice.model_type
-        type: group
-        conditions: type_id in (:filtered)
-        modelClass: Finance\Finance\Models\ModelType
     center:
         label: finance.finance::lang.model.invoice.center
         type: group
@@ -23,6 +18,13 @@ scopes:
         modelClass: Finance\Finance\Models\Invoice
         conditions: type IN (:filtered) 
         options: getTypeOptions
+    model_type:
+        label: finance.finance::lang.model.invoice.model_type
+        type: group
+        conditions: type_id in (:filtered)
+        dependsOn: type
+        options: getModelTypeOptions
+        modelClass: Finance\Finance\Models\Invoice
     currency:
         label: finance.finance::lang.model.invoice.currency
         type: group
