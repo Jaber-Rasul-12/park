@@ -34,16 +34,6 @@
                     data-stripe-load-indicator>
                     <?= e(trans('backend::lang.form.create_and_close')) ?>
                 </button>
-                <button
-                    type="submit"
-                    data-request="onSave"
-                    data-hotkey="ctrl+s, cmd+s"
-                    data-request-data="url: 'create'"
-                    data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
-                    class="btn btn-primary"
-                    data-stripe-load-indicator>
-                    <?= e(trans('finance.finance::lang.plugin.create_and_new')) ?>
-                </button>
                 <span class="btn-text">
                     <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url('finance/finance/controllertypes') ?>"><?= e(trans('backend::lang.form.cancel')) ?></a>
                 </span>

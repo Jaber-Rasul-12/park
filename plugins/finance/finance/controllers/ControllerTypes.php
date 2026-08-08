@@ -21,7 +21,7 @@ class ControllerTypes extends Controller
     }
 
 
-               public function formGetRedirectUrl($context = null, $model = null)
+                   public function formGetRedirectUrl($context = null, $model = null)
     {
                $url = post('url');
         if (($url == 'create') && !empty($url)) {

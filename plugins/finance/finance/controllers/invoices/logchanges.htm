@@ -1,0 +1,16 @@
+
+
+<?php if ($this->user->hasAccess('log_changes_finance')) { ?>
+
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('finance/finance/invoices') ?>"><?= e(trans('finance.finance::lang.controller.invoices.invoices')) ?></a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->vars['logbookWidget']->render() ?>
+    </div>
+</div>
+ <?php } ?>

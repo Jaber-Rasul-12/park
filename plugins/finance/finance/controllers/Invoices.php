@@ -6,6 +6,7 @@ use Finance\Finance\Models\Invoice;
 use Finance\Finance\Models\Month;
 use Finance\Finance\Models\Year;
 use Flash;
+use Jacob\Logbook\ReportWidgets\LogBookModelChanges;
 
 class Invoices extends Controller
 {
@@ -41,6 +42,20 @@ class Invoices extends Controller
                 return "finance/finance/invoices/update/$model->id";
             }
         }
+    }
+
+    public function logchanges(){
+
+    $this->pageTitle = trans('finance.finance::lang.plugin.log_changes_finance');
+
+
+     $widget = new LogBookModelChanges($this, [
+            'limitPerPage' => 20 
+        ]);
+        
+        // Pass to view
+        $this->vars['logbookWidget'] = $widget;
+
     }
 
 public function onDailyFundMovement()

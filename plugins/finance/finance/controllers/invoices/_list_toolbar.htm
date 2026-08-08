@@ -25,4 +25,9 @@
 
  <a href="<?= Backend::url('finance/finance/invoices/reports') ?>" class="btn btn-primary wn-icon-print"><?= e(trans('finance.finance::lang.plugin.print_tables')) ?></a>
 
+ <?php if ($this->user->hasAccess('log_changes_finance')) {?>
+
+ <a href="<?= Backend::url('finance/finance/invoices/logchanges') ?>" class="btn btn-primary wn-icon-print"><?= e(trans('finance.finance::lang.plugin.log_changes_finance')) ?></a>
+
+ <?php } ?>
 </div>
