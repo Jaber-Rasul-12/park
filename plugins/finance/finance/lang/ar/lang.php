@@ -7,7 +7,7 @@ return [
         'finance_menu' => 'المالية',
         'centers' => 'المراكز',
         'types' => 'أنواع الصرف',
-        'invoices' => 'الفواتير',
+        'invoices' => 'السندات',
         'select' => 'اختر',
         'log_changes_finance' => 'سجل التغييرات المالية',
         'save_and_print' => 'حفظ وطباعة',
@@ -103,7 +103,7 @@ return [
             'controllertypes' => 'أنواع الصرف',
         ],
         'invoices' => [
-            'invoices' => 'الفواتير',
+            'invoices' => 'السندات',
         ],
                 'years' => [
             'years' => 'السنوات',
