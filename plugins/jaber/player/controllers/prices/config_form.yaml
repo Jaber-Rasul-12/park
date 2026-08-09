@@ -1,0 +1,10 @@
+name: 'jaber.player::lang.controller.prices.prices'
+form: $/jaber/player/models/price/fields.yaml
+modelClass: Jaber\Player\Models\Price
+defaultRedirect: jaber/player/prices
+create:
+    redirect: 'jaber/player/prices/update/:id'
+    redirectClose: jaber/player/prices
+update:
+    redirect: jaber/player/prices
+    redirectClose: jaber/player/prices

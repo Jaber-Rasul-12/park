@@ -1,0 +1,10 @@
+fields:
+    name:
+        label: 'jaber.player::lang.model.product.name'
+        span: auto
+        type: text
+    price:
+        label: 'jaber.player::lang.model.product.price'
+        context: 'create'
+        span: auto
+        type: number

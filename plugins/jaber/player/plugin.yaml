@@ -1,0 +1,54 @@
+plugin:
+    name: 'jaber.player::lang.plugin.name'
+    description: 'jaber.player::lang.plugin.description'
+    author: jaber
+    icon: 'fas icon-coffee'
+    replaces: {  }
+permissions:
+    player:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.player'
+    products:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.products'
+    prices:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.prices'
+    invoices:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.invoices'
+    reports:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.reports'
+navigation:
+    player:
+        label: 'jaber.player::lang.plugin.player'
+        url: jaber/player/invoices
+        iconSvg: plugins/jaber/player/assets/svg/cafe.svg
+        icon: icon-coffee
+        permissions:
+            - player
+        sideMenu:
+           
+            products:
+                label: 'jaber.player::lang.plugin.products'
+                url: jaber/player/products
+                icon: icon-cutlery
+                permissions:
+                    - products
+            prices:
+                label: 'jaber.player::lang.plugin.prices'
+                url: jaber/player/prices
+                icon: icon-money
+            invoices:
+                label: 'jaber.player::lang.plugin.invoices'
+                url: jaber/player/invoices
+                icon: icon-file-text
+                permissions:
+                    - products
+            reports:
+                label: 'jaber.player::lang.plugin.reports'
+                url: jaber/player/reports
+                icon: icon-chart-line
+                permissions:
+                    - reports

@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: 'jaber.player::lang.model.invoice.id'
+        type: number
+    product:
+        label: 'jaber.player::lang.model.invoice.product'
+        relation: product
+        select: name
+    price:
+        label: 'jaber.player::lang.model.invoice.price'
+        relation: price
+        select: price
+    number:
+        label: 'jaber.player::lang.model.invoice.number'
+        type: text
+    total_price:
+        label: 'jaber.player::lang.model.invoice.total_price'
+        type: text
+    created_at:
+        label: 'jaber.player::lang.model.invoice.created_at'
+        type: datetime
+    updated_at:
+        label: 'jaber.player::lang.model.invoice.updated_at'
+        type: datetime

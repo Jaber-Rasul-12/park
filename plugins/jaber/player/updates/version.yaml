@@ -1,0 +1,11 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table jaber_player_products'
+    - builder_table_create_jaber_player_products.php
+1.0.3:
+    - 'Created table jaber_player_prices'
+    - builder_table_create_jaber_player_prices.php
+1.0.4:
+    - 'Created table jaber_player_invoices'
+    - builder_table_create_jaber_player_invoices.php

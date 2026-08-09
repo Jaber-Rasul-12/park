@@ -1,0 +1,25 @@
+fields:
+    product:
+        label: 'jaber.player::lang.model.invoice.product'
+        span: auto
+        type: relation
+        select: name
+        placeholder: jaber.player::lang.plugin.select
+    price_id:
+        label: 'jaber.player::lang.model.invoice.price'
+        span: auto
+        type: dropdown
+        dependsOn:  product
+        placeholder: jaber.player::lang.plugin.select
+    number:
+        label: 'jaber.player::lang.model.invoice.number'
+        span: auto
+        type: number
+    total_price:
+        label: 'jaber.player::lang.model.invoice.total_price'
+        span: auto
+        dependsOn: 
+                - product
+                - price_id
+                - number
+        type: number

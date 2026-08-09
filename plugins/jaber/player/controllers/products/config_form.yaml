@@ -1,0 +1,10 @@
+name: 'jaber.player::lang.controller.products.products'
+form: $/jaber/player/models/product/fields.yaml
+modelClass: Jaber\Player\Models\Product
+defaultRedirect: jaber/player/products
+create:
+    redirect: 'jaber/player/products/update/:id'
+    redirectClose: jaber/player/products
+update:
+    redirect: jaber/player/products
+    redirectClose: jaber/player/products

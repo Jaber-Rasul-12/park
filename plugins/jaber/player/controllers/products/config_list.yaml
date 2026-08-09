@@ -1,0 +1,12 @@
+list: $/jaber/player/models/product/columns.yaml
+modelClass: Jaber\Player\Models\Product
+title: 'jaber.player::lang.controller.products.products'
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'jaber/player/products/update/:id'

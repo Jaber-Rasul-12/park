@@ -1,0 +1,95 @@
+
+
+<div class="column justify-content-center" style=" width: 100%;">
+    <div class="scoreboard col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center align-items-center" style="margin-top: 10px; width: 100%; text-align: center;">
+
+        <div class="scoreboard-item text-center">
+            <h4 class="scoreboard-title"><?= e(trans('jaber.player::lang.plugin.from_date')) ?></h4>
+            <p class="wn-icon-star"><?= $from_date ?></p>
+        </div>
+        <div class="scoreboard-item text-center">
+            <h4 class="scoreboard-title"><?= e(trans('jaber.player::lang.plugin.to_date')) ?></h4>
+            <p class="wn-icon-star"><?= $to_date ?></p>
+        </div>
+    </div>
+
+
+</div>
+<style>
+    .scoreboard {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .scoreboard-item {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .scoreboard-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .scoreboard-item p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .wn-icon-star {
+        font-size: 30px;
+        color: #ffcc00;
+    }
+
+    .finance-display {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        width: 100%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .finance-header {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 600;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+    .finance-value {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        padding: 5px 7px;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .value-label {
+        color: #27ae60 !important;
+        font-weight: 500;
+    }
+
+    .value-amount {
+        color: #27ae60 !important;
+        font-weight: 700;
+        font-size: 1.8rem;
+    }
+
+    .error-message {
+        color: #e74c3c;
+        background-color: #fde8e8;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        text-align: center;
+    }
+</style>

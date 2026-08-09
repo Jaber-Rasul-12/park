@@ -1,0 +1,10 @@
+name: 'jaber.player::lang.controller.invoices.invoices'
+form: $/jaber/player/models/invoice/fields.yaml
+modelClass: Jaber\Player\Models\Invoice
+defaultRedirect: jaber/player/invoices
+create:
+    redirect: 'jaber/player/invoices/update/:id'
+    redirectClose: jaber/player/invoices
+update:
+    redirect: jaber/player/invoices
+    redirectClose: jaber/player/invoices

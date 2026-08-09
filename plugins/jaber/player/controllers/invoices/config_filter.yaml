@@ -1,0 +1,6 @@
+scopes:
+    created_at:
+        label: jaber.player::lang.model.invoice.created_at
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
+    

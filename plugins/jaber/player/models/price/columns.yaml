@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: 'jaber.player::lang.model.price.id'
+        type: number
+    product:
+        label: 'jaber.player::lang.model.price.product'
+        relation: product
+        select: name
+        searchable: true
+    status:
+        label: jaber.player::lang.model.price.status
+        type: jaber-list-switch
+        icon: true
+        text-color: true
+        font-size: 20
+    price:
+        label: 'jaber.player::lang.model.price.price'
+        type: text
+    created_at:
+        label: 'jaber.player::lang.model.price.created_at'
+        type: datetime
+    updated_at:
+        label: 'jaber.player::lang.model.price.updated_at'
+        type: datetime

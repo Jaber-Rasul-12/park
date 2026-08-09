@@ -1,0 +1,11 @@
+fields:
+    product:
+        label: 'jaber.player::lang.model.price.product'
+        span: auto
+        type: relation
+        select: name
+        placeholder: jaber.player::lang.plugin.select
+    price:
+        label: 'jaber.player::lang.model.price.price'
+        span: auto
+        type: number

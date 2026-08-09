@@ -1,0 +1,85 @@
+<?= $this->makePartial('setting_print') ?>
+
+<?= $this->makePartial('header_chart', ['from_date'=>  $from_date , 'to_date'=>  $to_date]) ?>
+
+
+
+
+<?php if (!$invoice_items->isEmpty()) { ?>
+
+
+    <div class="control-list">
+        <h1 class="transfare-header text-center">
+            <span><?= e(trans('jaber.player::lang.plugin.total_price')) ?></span>
+            <span>:</span>
+            <span class="amount" style="color: green!important;">
+                <?= $invoice_items->sum('total_price'); ?>
+            </span>
+        </h1>
+
+        <table class="table data">
+            <thead>
+                <tr>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.id')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.invoice')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.product')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.category')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.price')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.number')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.total_price')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.created_at')) ?></a></th>
+                    <th><a><?= e(trans('jaber.player::lang.model.invoice.updated_at')) ?></a></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($invoice_items as $invoice_item) { ?>
+                    <tr>
+                        <td><?php echo $invoice_item->id ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->invoice->full_name ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->product->name ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->category->name ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->price->price ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->number ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->total_price ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->created_at ?? 'N/A'; ?></td>
+                        <td><?php echo $invoice_item->updated_at ?? 'N/A'; ?></td>
+
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+
+<?php } ?>
+
+
+
+
+
+
+<?= $this->makePartial('signature_print') ?>
+
+<style>
+    .transfare-header {
+        text-align: center;
+        background: linear-gradient(to right, #2c3e50, #34495e);
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        width: 100%;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+    }
+
+    .transfare-header span {
+        color: #f1c40f;
+        font-weight: bold;
+    }
+
+    .transfare-header .amount {
+        color: #2ecc71;
+    }
+</style>

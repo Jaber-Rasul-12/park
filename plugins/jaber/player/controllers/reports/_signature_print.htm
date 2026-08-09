@@ -1,0 +1,51 @@
+<?php
+
+use Carbon\Carbon;
+?>
+
+<div id="signature">
+
+
+
+  <div class="sigPad">
+    <label for="name"><?= e(trans('jaber.player::lang.plugin.signature')) ?> </label>
+
+    <ul class="sigNav">
+      <li class="drawIt"><a href="#draw-it" class="current btn btn-success"><?= e(trans('jaber.player::lang.plugin.sign_here')) ?></a></li>
+      <li class="clearButton"><a href="#clear"><?= e(trans('jaber.player::lang.plugin.clear')) ?></a></li>
+    </ul>
+    <div class="sig sigWrapper">
+      <div class="typed"></div>
+      <canvas class="pad" width="300" height="150"></canvas>
+      <input type="hidden" name="output" class="output">
+    </div>
+  </div>
+
+  <div class="sigPad">
+    <label for="name"><?= e(trans('jaber.player::lang.plugin.your_name')) ?> </label>
+    <input type="text" name="name" id="name_signature" class="name">
+    <ul class="sigNav">
+      <li class="typeIt"><a href="#type-it" class="current"><?= e(trans('jaber.player::lang.plugin.name_conversion')) ?></a></li>
+      <li class="clearButton"><a href="#clear"><?= e(trans('jaber.player::lang.plugin.clear')) ?></a></li>
+    </ul>
+    <div class="sig sigWrapper">
+      <div class="typed"></div>
+      <canvas class="pad" width="200" height="50"></canvas>
+      <input type="hidden" name="output-2" class="output">
+    </div>
+  </div>
+  <div style="align-self:flex-end;"><?= e(trans('jaber.player::lang.plugin.date')) ?> : <?= e(Carbon::now()) ?></div>
+</div>
+<style>
+  #signature {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+    $('.sigPad').signaturePad();
+  });
+</script>
