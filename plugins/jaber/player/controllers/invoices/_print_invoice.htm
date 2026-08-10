@@ -76,18 +76,7 @@
 </head>
 <body>
     <div class="receipt">
-        <div class="text-center">
-            <img class="store-logo" src="<?= e(Backend\Models\BrandSetting::getFavicon()) ?>" alt="Logo" onerror="this.style.display='none'">
-            <h2 class="store-name">حديقة أزادي</h2>
-            <p class="store-slogan">Azadi Park</p>
-            <hr class="divider">
-            <div class="receipt-meta">
-                <span><strong>رقم الفاتورة:</strong> #<?= e($invoice_ids ?? date('Ymd') . rand(1000, 9999)) ?></span>
-                <span><?= e($created_at ?? now()->format('d/m/Y h:i A')) ?></span>
-            </div>
-            <hr class="divider">
-        </div>
-
+        
         <div>
             <div class="table-header">
                 <span class="product-name">المنتج</span>
