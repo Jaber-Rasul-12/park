@@ -92,9 +92,6 @@
     </div>
 </div>
 
-<!-- نافذة الطباعة المخفية -->
-<div id="printReceiptContainer" style="display: none;"></div>
-
 <?php else: ?>
     <div class="error-box">
         <div class="error-icon">😕</div>
@@ -122,7 +119,6 @@
     margin: 0 auto;
 }
 
-/* ====== رأس الكاشير ====== */
 .pos-header {
     grid-column: 1 / -1;
     display: flex;
@@ -172,7 +168,6 @@
     opacity: 0.9;
 }
 
-/* ====== شبكة المنتجات ====== */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -183,7 +178,6 @@
     max-height: calc(100vh - 200px);
 }
 
-/* ====== بطاقة المنتج ====== */
 .product-card {
     background: white;
     border-radius: 15px;
@@ -198,11 +192,6 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border-color: #45911a;
-}
-
-.product-card.selected {
-    border-color: #45911a;
-    background: #f0faf0;
 }
 
 .product-image {
@@ -320,11 +309,6 @@
     box-shadow: 0 4px 15px rgba(69, 145, 26, 0.3);
 }
 
-.btn-add-to-cart:active {
-    transform: scale(0.98);
-}
-
-/* ====== سلة المشتريات ====== */
 .pos-cart {
     background: white;
     border-radius: 15px;
@@ -393,7 +377,6 @@
     font-size: 13px;
 }
 
-/* عنصر في السلة */
 .cart-item {
     display: flex;
     justify-content: space-between;
@@ -488,7 +471,6 @@
     transform: scale(1.2);
 }
 
-/* ====== تذييل السلة ====== */
 .cart-footer {
     padding: 15px 20px;
     border-top: 1px solid #e2e8f0;
@@ -537,7 +519,6 @@
     transform: none;
 }
 
-/* ====== رسائل التنبيه ====== */
 .toast {
     position: fixed;
     bottom: 30px;
@@ -572,7 +553,6 @@
     }
 }
 
-/* ====== حالة الخطأ ====== */
 .error-box {
     max-width: 500px;
     margin: 50px auto;
@@ -598,7 +578,6 @@
     font-weight: 500;
 }
 
-/* ====== استجابة ====== */
 @media (max-width: 1024px) {
     .pos-wrapper {
         grid-template-columns: 1fr;
@@ -636,7 +615,6 @@
     }
 }
 
-/* ====== تمرير السلة ====== */
 .cart-items::-webkit-scrollbar {
     width: 4px;
 }
@@ -669,7 +647,7 @@ $(document).ready(function() {
     var cart = [];
     var productData = {};
 
-    // جمع بيانات المنتجات مع السعر من جدول prices
+    // جمع بيانات المنتجات
     $('.product-card').each(function() {
         var card = $(this);
         var id = card.data('product-id');
@@ -713,7 +691,7 @@ $(document).ready(function() {
         qtyInput.val(1);
     });
 
-    // ====== النقر على البطاقة لإضافة المنتج ======
+    // ====== النقر على البطاقة ======
     $(document).on('click', '.product-card', function(e) {
         if ($(e.target).closest('.btn-add-to-cart').length || $(e.target).closest('.qty-control').length) {
             return;
@@ -820,7 +798,7 @@ $(document).ready(function() {
         checkoutBtn.prop('disabled', false);
     }
 
-    // ====== تحديث الكمية في السلة (باستخدام Event Delegation) ======
+    // ====== تحديث الكمية في السلة ======
     $(document).on('click', '.cart-qty-minus', function(e) {
         e.stopPropagation();
         var productId = $(this).data('id');
@@ -857,7 +835,7 @@ $(document).ready(function() {
         }
     });
 
-    // ====== إزالة منتج من السلة (مع تأكيد) ======
+    // ====== إزالة منتج ======
     $(document).on('click', '.cart-item-remove', function(e) {
         e.stopPropagation();
         var productId = $(this).data('id');
@@ -867,36 +845,32 @@ $(document).ready(function() {
         
         if (!item) return;
         
-
-            cart = cart.filter(function(i) {
-                return i.id !== productId;
-            });
-            updateCart();
-            showToast('❌ تم إزالة المنتج', 'error');
-        
+        cart = cart.filter(function(i) {
+            return i.id !== productId;
+        });
+        updateCart();
+        showToast('❌ تم إزالة المنتج', 'error');
     });
 
-    // ====== مسح السلة بالكامل (مع تأكيد) ======
+    // ====== مسح السلة ======
     $('#clearCart').on('click', function() {
         if (cart.length === 0) {
             showToast('⚠️ السلة فارغة بالفعل', 'error');
             return;
         }
         
-            cart = [];
-            updateCart();
-            showToast('🗑️ تم مسح السلة بالكامل', 'error');
-        
+        cart = [];
+        updateCart();
+        showToast('🗑️ تم مسح السلة بالكامل', 'error');
     });
 
-    // ====== إنشاء فاتورة باستخدام $.request في WinterCMS ======
+    // ====== إنشاء وطباعة فاتورة ======
     $('#checkoutBtn').on('click', function() {
         if (cart.length === 0) {
             showToast('السلة فارغة! أضف منتجات أولاً', 'error');
             return;
         }
 
-        // تجهيز البيانات للإرسال
         var invoiceData = {
             items: cart.map(function(item) {
                 return {
@@ -910,25 +884,77 @@ $(document).ready(function() {
             }),
             total: cart.reduce(function(sum, item) {
                 return sum + (item.price * item.qty);
-            }, 0),
-            invoice_number: Math.floor(100000 + Math.random() * 900000)
+            }, 0)
         };
 
-        // استخدام $.request في WinterCMS
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+        $btn.html('⏳ جاري المعالجة...');
+
         $.request('onPrintInvoice', {
             data: {
                 invoice_data: JSON.stringify(invoiceData)
             },
             success: function(data) {
-                showToast('✅ تم إنشاء الفاتورة وطباعتها بنجاح!', 'success');
+                $btn.prop('disabled', false);
+                $btn.html(`
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    أنشاء و طباعة فاتورة
+                `);
                 
-                // تفريغ السلة بعد 2 ثانية
-                setTimeout(function() {
-                    cart = [];
-                    updateCart();
-                }, 2000);
+                if (data.success) {
+                    showToast('✅ ' + data.message, 'success');
+                    
+                    // ====== طباعة الإيصال ======
+                    if (data.html) {
+                        var printWindow = window.open('', '_blank', 'width=500,height=700,scrollbars=yes,resizable=yes');
+                        
+                        if (printWindow) {
+                            printWindow.document.write(data.html);
+                            printWindow.document.close();
+                            
+                            printWindow.onload = function() {
+                                setTimeout(function() {
+                                    printWindow.print();
+                                }, 500);
+                            };
+                            
+                            printWindow.onafterprint = function() {
+                                setTimeout(function() {
+                                    printWindow.close();
+                                }, 1000);
+                            };
+                        } else {
+                            showToast('❌ يرجى السماح للنوافذ المنبثقة', 'error');
+                        }
+                    }
+                    
+                    setTimeout(function() {
+                        cart = [];
+                        updateCart();
+                    }, 3000);
+                    
+                } else {
+                    showToast('❌ ' + data.message, 'error');
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
+                $btn.prop('disabled', false);
+                $btn.html(`
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    أنشاء و طباعة فاتورة
+                `);
+                
                 showToast('❌ حدث خطأ في إنشاء الفاتورة', 'error');
                 console.error('Error:', textStatus, errorThrown);
             }
@@ -953,14 +979,12 @@ $(document).ready(function() {
         }, 2500);
     }
 
-    // ====== اختصارات لوحة المفاتيح ======
+    // ====== اختصارات ======
     $(document).on('keydown', function(e) {
-        // Ctrl + Enter = إنشاء فاتورة
         if (e.ctrlKey && e.key === 'Enter') {
             e.preventDefault();
             $('#checkoutBtn').click();
         }
-        // Escape = مسح السلة
         if (e.key === 'Escape') {
             if (cart.length > 0) {
                 $('#clearCart').click();
@@ -968,7 +992,6 @@ $(document).ready(function() {
         }
     });
 
-    // ====== إظهار عدد المنتجات في السلة في تبويب المتصفح ======
     function updateTitle() {
         var count = cart.reduce(function(sum, item) {
             return sum + item.qty;
@@ -981,7 +1004,6 @@ $(document).ready(function() {
         }
     }
 
-    // حفظ الدالة الأصلية
     var originalUpdateCart = updateCart;
     updateCart = function() {
         originalUpdateCart();

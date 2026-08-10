@@ -71,13 +71,11 @@ public function invoices()
     $this->vars['invoices'] = $products;
 }
 
-       public function onPrintInvoice()
+ public function onPrintInvoice()
     {
-        // الحصول على البيانات
         $invoiceData = post('invoice_data');
         $invoiceData = json_decode($invoiceData, true);
         
-        // التحقق من صحة البيانات
         if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
             return [
                 'success' => false, 
@@ -86,7 +84,6 @@ public function invoices()
         }
 
         try {
-            // ====== حفظ كل منتج كفاتورة منفصلة ======
             $savedInvoices = [];
             
             foreach ($invoiceData['items'] as $item) {
@@ -98,27 +95,21 @@ public function invoices()
                 $invoice->created_at = now();
                 $invoice->updated_at = now();
                 $invoice->save();
-                
                 $savedInvoices[] = $invoice->id;
             }
             
-            // ====== تجهيز بيانات الطباعة ======
-            $this->vars['items'] = $invoiceData['items'];
-            $this->vars['total'] = $invoiceData['total'];
-            $this->vars['invoice_ids'] = implode(', ', $savedInvoices);
-            $this->vars['created_at'] = now()->format('d/m/Y h:i A');
+            $html = $this->makePartial('print_invoice', [
+                'items' => $invoiceData['items'],
+                'total' => $invoiceData['total'],
+                'invoice_ids' => implode(', ', $savedInvoices),
+                'created_at' => now()->format('d/m/Y h:i A')
+            ]);
             
-            // ====== إرجاع البيانات ======
             return [
                 'success' => true,
                 'message' => 'تم إنشاء الفواتير بنجاح',
                 'invoice_ids' => $savedInvoices,
-                'html' => $this->makePartial('print_invoice', [
-                    'items' => $invoiceData['items'],
-                    'total' => $invoiceData['total'],
-                    'invoice_ids' => implode(', ', $savedInvoices),
-                    'created_at' => now()->format('d/m/Y h:i A')
-                ])
+                'html' => $html
             ];
             
         } catch (\Exception $e) {
@@ -128,6 +119,7 @@ public function invoices()
             ];
         }
     }
+
 
     
 
