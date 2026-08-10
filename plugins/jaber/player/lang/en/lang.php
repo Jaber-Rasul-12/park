@@ -33,6 +33,7 @@ return [
         'price_require' => 'Price required',
         'error_status_save' => 'The name must be unique.',
         'create_and_new' => 'Create and new',
+        'invoice_speed'=>'Invoice speed',
     ],
     'model' => [
 

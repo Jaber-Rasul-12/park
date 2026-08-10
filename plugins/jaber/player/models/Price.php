@@ -71,14 +71,14 @@ class Price extends Model
 
   public function beforeUpdate()
   {
-    if (($this->original['status'] == false) && ($this->status == true)) {
+    if (($this->original['status'] == false) && ($this->status == true) && ($this->original['product_id'] == false) && ($this->product_id == true)) {
       $this->statusPirce();
      
     }
   }
   protected function statusPirce()
   {
-    $exists = self::where('status', true)
+    $exists = self::where('status', true)->where('product_id', $this->product_id)
       ->exists();
 
     if ($exists) {

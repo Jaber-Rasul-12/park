@@ -9,3 +9,7 @@ fields:
         label: 'jaber.player::lang.model.price.price'
         span: auto
         type: number
+    status:
+        label: 'jaber.player::lang.model.price.status'
+        span: auto
+        type: switch

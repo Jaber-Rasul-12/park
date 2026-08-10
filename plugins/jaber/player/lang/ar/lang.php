@@ -33,7 +33,7 @@ return [
         'price_require' => 'السعر مطلوب',
          'error_status_save' => 'لا يمكن الحفظ بسبب وجود قسم اخر مفعل',
         'create_and_new' => 'إنشاء وجديد',
-
+'invoice_speed'=>'نقطة البيع',
 
 
     ],
