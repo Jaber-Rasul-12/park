@@ -30,9 +30,9 @@
             margin: 2px 0;
         }
         .total-label { font-weight: bold; font-size: 12px; }
-        .total-amount { font-weight: bold; font-size: 14px; color: #45911a; }
-        .store-name { font-size: 14px; margin: 0; color: #45911a; }
-        .store-slogan { font-size: 10px; color: #666; margin: 1px 0; }
+        .total-amount { font-weight: bold; font-size: 14px; color: #000000; }
+        .store-name { font-size: 14px; margin: 0; color: #000000; }
+        .store-slogan { font-size: 10px; color: #000000; margin: 1px 0; }
         .store-logo { 
             width: 30px; 
             height: 30px; 
@@ -60,8 +60,8 @@
         }
         .footer-text { text-align: center; padding: 5px 0 2px; font-weight: bold; }
         .footer-text p { font-size: 10px; margin: 1px 0; font-weight: bold; }
-        .footer-text .thanks { color: #45911a; font-size: 10px; font-weight: bold; }
-        .footer-text .designer { font-size: 11px; color: #91281a; margin-top: 2px; }
+        .footer-text .thanks { color: #000000; font-size: 12px; font-weight: bold; }
+        .footer-text .designer { font-size: 11px; color: #000000; margin-top: 2px; }
         
         @page {
             margin: 0;
@@ -76,7 +76,14 @@
 </head>
 <body>
     <div class="receipt">
-        
+        <div class="text-center">
+           
+            <div class="receipt-meta">
+                <span><strong>رقم الفاتورة:</strong> #<?= e($invoice_ids ?? date('Ymd') . rand(1000, 9999)) ?></span>
+                <span><?= e($created_at ?? now()->format('d/m/Y h:i A')) ?></span>
+            </div>
+        </div>
+
         <div>
             <div class="table-header">
                 <span class="product-name">المنتج</span>
