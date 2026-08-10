@@ -7,7 +7,7 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Jaber\Player\Models\Product;
 use Flash;
-
+use DB;
 class Invoices extends Controller
 {
     public $implement = ['Backend\Behaviors\ListController',        'Backend\Behaviors\FormController'];
@@ -118,6 +118,93 @@ public function invoices()
                 'message' => 'حدث خطأ: ' . $e->getMessage()
             ];
         }
+    }
+
+
+    // ====== دالة التقارير ======
+    public function reports()
+    {
+        $this->pageTitle = trans('jaber.player::lang.plugin.reports');
+        
+        // تعيين التاريخ الافتراضي لليوم
+        $this->vars['selected_date'] = date('Y-m-d');
+        $this->vars['reports_data'] = [];
+        $this->vars['summary'] = [];
+        
+        // جلب جميع المنتجات لعرضها في الفلتر
+        $this->vars['products'] = Product::with('prices')->get();
+    }
+
+  public function onGetReports()
+    {
+        $date = post('date_value');
+        
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
+        
+        // جلب جميع المنتجات
+        $products = Product::orderBy('name')->get();
+        
+        // جلب جميع الفواتير في التاريخ المحدد
+        $invoices = Invoice::whereDate('created_at', $date)->get();
+        
+        $reportData = [];
+        $totalQuantity = 0;
+        $totalRevenue = 0;
+        
+        // حساب مبيعات كل منتج
+        foreach ($products as $product) {
+            // جلب فواتير هذا المنتج في التاريخ المحدد
+            $productInvoices = $invoices->where('product_id', $product->id);
+            
+            // حساب الكمية والإيرادات
+            $quantity = $productInvoices->sum('number');
+            $revenue = $productInvoices->sum('total_price');
+            
+            // إذا كان هناك مبيعات للمنتج
+            if ($quantity > 0 || $revenue > 0) {
+                $totalQuantity += $quantity;
+                $totalRevenue += $revenue;
+                
+                $reportData[] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'image' => $product->image,
+                    'quantity' => $quantity,
+                    'revenue' => $revenue
+                ];
+            }
+        }
+        
+        // ترتيب حسب الأكثر مبيعاً
+        usort($reportData, function($a, $b) {
+            return $b['quantity'] - $a['quantity'];
+        });
+        
+        // حساب إجمالي الفواتير
+        $totalInvoices = $invoices->count();
+        
+        // تجهيز الملخص
+        $summary = [
+            'total_products' => count($reportData),
+            'total_quantity' => $totalQuantity,
+            'total_revenue' => $totalRevenue,
+            'total_invoices' => $totalInvoices,
+            'date' => $date
+        ];
+        
+        return [
+           
+            'success' => true,
+            'data' => $reportData,
+            'summary' => $summary,
+            '#body_new_new' => $this->makePartial('reports_table', [
+                'reports_data' => $reportData,
+                'summary' => $summary,
+                'selected_date' => $date
+            ])
+        ];
     }
 
 

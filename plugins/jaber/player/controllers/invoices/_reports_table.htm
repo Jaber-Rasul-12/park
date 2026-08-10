@@ -1,0 +1,119 @@
+
+     <!-- ملخص سريع -->
+    <div class="summary-cards" id="summaryCards">
+        <div class="summary-card">
+            <div class="summary-icon">📦</div>
+            <div class="summary-info">
+                <span class="summary-label">إجمالي المنتجات المباعة</span>
+                <span class="summary-value" id="totalProducts"><?= e($summary['total_products'] ?? 0) ?></span>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">🛒</div>
+            <div class="summary-info">
+                <span class="summary-label">عدد الفواتير</span>
+                <span class="summary-value" id="totalInvoices"><?= e($summary['total_invoices'] ?? 0) ?></span>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">📈</div>
+            <div class="summary-info">
+                <span class="summary-label">إجمالي القطع المباعة</span>
+                <span class="summary-value" id="totalQuantity"><?= e($summary['total_quantity'] ?? 0) ?></span>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">💰</div>
+            <div class="summary-info">
+                <span class="summary-label">إجمالي الإيرادات</span>
+                <span class="summary-value" id="totalRevenue"><?= e(number_format($summary['total_revenue'] ?? 0, 2)) ?></span>
+            </div>
+        </div>
+    </div>
+
+<?php if(isset($reports_data) && !empty($reports_data)): ?>
+<div class="reports-wrapper">
+    
+    <!-- الجدول الرئيسي -->
+    <div class="table-responsive">
+        <table class="reports-table">
+            <thead>
+                <tr>
+            
+                    <th class="col-product">المنتج</th>
+                    <th class="col-quantity">الكمية المباعة</th>
+                    <th class="col-revenue">الإيرادات</th>
+                    <th class="col-progress">النسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                $rank = 1; 
+                $maxQuantity = max(array_column($reports_data, 'quantity'));
+                ?>
+                <?php foreach($reports_data as $item): ?>
+                <?php 
+                $percentage = $maxQuantity > 0 ? round(($item['quantity'] / $maxQuantity) * 100) : 0;
+                $rankClass = $rank <= 3 ? 'rank-' . $rank : 'rank-other';
+                $medal = $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : ''));
+                ?>
+                <tr class="rank-<?= $rank <= 3 ? 'top' : 'normal' ?>">
+                    <td class="col-product">
+                        <div class="product-cell">
+                            <div class="product-image-wrapper">
+                                <?php if($item['image']): ?>
+                                    <img class="product-image"  alt="<?= e($item['name']) ?>">
+                                <?php else: ?>
+                                    <div class="product-image-placeholder">🎮</div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="product-info">
+                                <span class="product-name"><?= e($item['name']) ?></span>
+                                <span class="product-id">#<?= e($item['id']) ?></span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="col-quantity">
+                        <span class="quantity-badge"><?= e($item['quantity']) ?></span>
+                    </td>
+                    <td class="col-revenue">
+                        <span class="revenue-amount"><?= e(number_format($item['revenue'], 2)) ?> ل.س</span>
+                    </td>
+                    <td class="col-progress">
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: <?= $percentage ?>%;">
+                                    <span class="progress-label"><?= $percentage ?>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php $rank++; ?>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="table-footer">
+                        <div class="footer-content">
+                            <span class="footer-icon">📊</span>
+                            <span class="footer-text">إجمالي التقرير - <?= e($summary['total_products'] ?? 0) ?> منتج</span>
+                            <span class="footer-date"><?= e($selected_date ?? date('Y-m-d')) ?></span>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<?php else: ?>
+<div class="empty-state-wrapper">
+    <div class="empty-state-icon">📭</div>
+    <h3 class="empty-state-title">لا توجد مبيعات</h3>
+    <p class="empty-state-desc">لا توجد مبيعات مسجلة في التاريخ المحدد</p>
+    <div class="empty-state-date">
+        <span class="date-label">📅 التاريخ:</span>
+        <span class="date-value"><?= e($selected_date ?? date('Y-m-d')) ?></span>
+    </div>
+</div>
+<?php endif; ?>
