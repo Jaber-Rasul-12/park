@@ -100,13 +100,14 @@
                 <div class="item-row">
                     <span class="product-name"><?= e($item['product_name']) ?></span>
                     <span class="product-qty"><?= e($item['quantity']) ?></span>
-                    <span class="product-price"><?= e(number_format($item['price'], 2)) ?></span>
+                    <span class="product-price"><?= e(number_format($item['price'])) ?></span>
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
 
         <div style="margin-top: 1px;">
+            <hr class="divider">
             <hr class="divider">
             <div class="footer-text">
                 <p>شكراً لزيارتكم حديقة أزادي</p>
