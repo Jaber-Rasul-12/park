@@ -7,56 +7,60 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: Arial, sans-serif;
-            width: 80mm;
+            width: 40mm;
             margin: 0 auto;
             padding: 0;
+            font-weight: bold;
             background: white;
         }
         .receipt {
             padding: 3mm 2mm;
-            width: 80mm;
+            width: 40mm;
         }
-        .text-center { text-align: center; }
-        .divider { border: none; border-top: 1px dashed #999; margin: 5px 0; }
-        .flex-between { display: flex; justify-content: space-between; }
-        .product-name { flex: 2; text-align: right; padding-right: 5px; }
+        .text-center { text-align: center; font-weight: bold; }
+        .divider { border: none; border-top: 1px dashed #000000; margin: 5px 0; font-weight: bold;}
+        .flex-between { display: flex; justify-content: space-between; font-weight: bold; }
+        .product-name { flex: 2; text-align: right; padding-right: 5px; font-weight: bold;}
         .product-qty { flex: 0.8; text-align: center; }
-        .product-price { flex: 1; text-align: left; padding-left: 5px; }
+        .product-price { flex: 1; text-align: left; padding-left: 5px; font-weight: bold; }
         .total-box { 
             display: flex; 
             justify-content: space-between; 
             background: #f5f5f5; 
             padding: 2px 4px;
             margin: 2px 0;
+            font-weight: bold;
         }
         .total-label { font-weight: bold; font-size: 12px; }
-        .total-amount { font-weight: bold; font-size: 14px; color: #000000; }
-        .store-name { font-size: 14px; margin: 0; color: #000000; }
-        .store-slogan { font-size: 10px; color: #000000; margin: 1px 0; }
+        .total-amount { font-weight: bold; font-size: 14px; color: #000000; font-weight: bold;}
+        .store-name { font-size: 14px; margin: 0; color: #000000; font-weight: bold;}
+        .store-slogan { font-size: 10px; color: #000000; margin: 1px 0; font-weight: bold;}
         .store-logo { 
             width: 30px; 
             height: 30px; 
             margin: 0 auto 2px; 
             display: block;
             border-radius: 5%;
+            font-weight: bold;
         }
         .receipt-meta { 
             display: flex; 
             justify-content: space-between; 
             font-size: 10px; 
             padding: 2px 0;
+            font-weight: bold;
         }
         .table-header {
             display: flex;
             font-size: 11px;
             font-weight: bold;
-            border-bottom: 2px solid #ddd;
+            border-bottom: 2px solid #000000;
             padding: 2px 0;
         }
         .item-row {
             display: flex;
             padding: 2px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #000000;
         }
         .footer-text { text-align: center; padding: 5px 0 2px; font-weight: bold; }
         .footer-text p { font-size: 10px; margin: 1px 0; font-weight: bold; }
@@ -67,10 +71,11 @@
             margin: 0;
             padding: 0;
             size: 40mm auto;
+            font-weight: bold;
         }
         @media print {
-            body { width: 40mm; margin: 0; padding: 0; }
-            .receipt { padding: 2mm 1mm; }
+            body { width: 40mm; font-weight: bold; margin: 0; padding: 0; }
+            .receipt { padding: 2mm 1mm; font-weight: bold; }
         }
     </style>
 </head>
