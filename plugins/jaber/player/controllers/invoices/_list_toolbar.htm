@@ -1,6 +1,8 @@
 <div data-control="toolbar">
         <a href="<?= Backend::url('jaber/player/invoices/create') ?>" class="btn btn-primary wn-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
-            <button
+            
+        <?php if($this->user->hasAccess('delete_invoice')) {?>
+        <button
         class="btn btn-default wn-icon-trash-o"
         disabled="disabled"
         onclick="$(this).data('request-data', {
@@ -15,8 +17,12 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
-
+    <?php } ?>
+ <?php if($this->user->hasAccess('point_of_sale')) {?>
        <a class="btn btn-default wn-icon-filter" href="<?= Backend::url('jaber/player/invoices/invoices') ?>"  ><?= e(trans('jaber.player::lang.plugin.invoice_speed')) ?></a>
+        <?php } ?> <?php if($this->user->hasAccess('report_invoice')) {?>
        <a class="btn btn-default wn-icon-filter" href="<?= Backend::url('jaber/player/invoices/reports') ?>"  ><?= e(trans('jaber.player::lang.plugin.reports')) ?></a>
-
+ <?php } ?>
     </div>
+
+

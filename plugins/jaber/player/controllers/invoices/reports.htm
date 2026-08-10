@@ -1,5 +1,5 @@
 
-
+<?php if($this->user->hasAccess('report_invoice')) {?>
 <?php Block::put('breadcrumb') ?>
 <ul>
     <li><a href="<?= Backend::url('jaber/player/invoices') ?>"><?= e(trans('jaber.player::lang.controller.invoices.invoices')) ?></a></li>
@@ -857,3 +857,4 @@
     }
 }
 </style>
+ <?php } ?>

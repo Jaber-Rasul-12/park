@@ -34,6 +34,9 @@ return [
          'error_status_save' => 'لا يمكن الحفظ بسبب وجود قسم اخر مفعل',
         'create_and_new' => 'إنشاء وجديد',
 'invoice_speed'=>'نقطة البيع',
+'point_of_sale'=>' نقطة البيع',
+        'delete_invoice'=>' حذف الفاتورة',
+        'report_invoice'=>' تقرير الفاتورة',
 
 
     ],

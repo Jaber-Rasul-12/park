@@ -1,3 +1,4 @@
+ <?php if($this->user->hasAccess('point_of_sale')) {?>
 <?php Block::put('breadcrumb') ?>
 <ul>
     <li><a href="<?= Backend::url('jaber/player/invoices') ?>"><?= e(trans('jaber.player::lang.controller.invoices.invoices')) ?></a></li>
@@ -1011,3 +1012,4 @@ $(document).ready(function() {
     };
 });
 </script>
+ <?php } ?>

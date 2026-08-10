@@ -20,6 +20,15 @@ permissions:
     reports:
         tab: 'jaber.player::lang.plugin.player'
         label: 'jaber.player::lang.plugin.reports'
+    point_of_sale:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.point_of_sale'
+    delete_invoice:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.delete_invoice'
+    report_invoice:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.report_invoice'
 navigation:
     player:
         label: 'jaber.player::lang.plugin.player'

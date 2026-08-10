@@ -34,6 +34,9 @@ return [
         'error_status_save' => 'The name must be unique.',
         'create_and_new' => 'Create and new',
         'invoice_speed'=>'Invoice speed',
+        'point_of_sale'=>' Point of sale',
+        'delete_invoice'=>' Delete invoice',
+        'report_invoice'=>' Report invoice',
     ],
     'model' => [
 
