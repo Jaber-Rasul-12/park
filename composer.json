@@ -44,7 +44,8 @@
         "wikimedia/composer-merge-plugin": "~2.1.0",
         "winter/wn-translate-plugin": "^2.3",
         "winter/wn-notify-plugin": "^2.1",
-        "mexitek/phpcolors": "^1.0"
+        "mexitek/phpcolors": "^1.0",
+        "mike42/escpos-php": "^2.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.8",

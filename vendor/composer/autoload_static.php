@@ -121,6 +121,7 @@ class ComposerStaticInit6c0d154127cb131fb923ba9f4e90536d
         array (
             'Monolog\\' => 8,
             'Mockery\\' => 8,
+            'Mike42\\' => 7,
         ),
         'L' => 
         array (
@@ -225,7 +226,7 @@ class ComposerStaticInit6c0d154127cb131fb923ba9f4e90536d
         ),
         'System\\' => 
         array (
-            0 => __DIR__ . '/..' . '/winter/wn-system-module',
+            0 => __DIR__ . '/../..' . '/modules/system',
         ),
         'Symfony\\Polyfill\\Uuid\\' => 
         array (
@@ -392,6 +393,10 @@ class ComposerStaticInit6c0d154127cb131fb923ba9f4e90536d
         array (
             0 => __DIR__ . '/..' . '/mockery/mockery/library/Mockery',
         ),
+        'Mike42\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
+        ),
         'League\\MimeTypeDetection\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
@@ -516,7 +521,7 @@ class ComposerStaticInit6c0d154127cb131fb923ba9f4e90536d
         ),
         'Cms\\' => 
         array (
-            0 => __DIR__ . '/..' . '/winter/wn-cms-module',
+            0 => __DIR__ . '/../..' . '/modules/cms',
         ),
         'Carbon\\Doctrine\\' => 
         array (
@@ -532,7 +537,7 @@ class ComposerStaticInit6c0d154127cb131fb923ba9f4e90536d
         ),
         'Backend\\' => 
         array (
-            0 => __DIR__ . '/..' . '/winter/wn-backend-module',
+            0 => __DIR__ . '/../..' . '/modules/backend',
         ),
     );
 
