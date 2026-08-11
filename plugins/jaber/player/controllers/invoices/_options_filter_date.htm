@@ -1,0 +1,64 @@
+<?php if($check == 'year'): ?>
+    <!-- Year selection -->
+    <div class="filter-group">
+        <label for="reportYear">اختر السنة:</label>
+        <select name="year_value" id="reportYear" class="form-control">
+            <?php for($y = date('Y'); $y >= date('Y')-10; $y--): ?>
+                <option value="<?= $y ?>"><?= $y ?></option>
+            <?php endfor; ?>
+        </select>
+        <button class="btn btn-primary" data-request="onGetReports" id="getReportsBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            عرض التقرير
+        </button>
+    </div>
+<?php elseif($check == 'month'): ?>
+    <!-- Month selection -->
+    <div class="filter-group">
+        <label for="reportMonth">اختر الشهر:</label>
+        <select name="month_value" id="reportMonth" class="form-control">
+            <option value="1">يناير</option>
+            <option value="2">فبراير</option>
+            <option value="3">مارس</option>
+            <option value="4">أبريل</option>
+            <option value="5">مايو</option>
+            <option value="6">يونيو</option>
+            <option value="7">يوليو</option>
+            <option value="8">أغسطس</option>
+            <option value="9">سبتمبر</option>
+            <option value="10">أكتوبر</option>
+            <option value="11">نوفمبر</option>
+            <option value="12">ديسمبر</option>
+        </select>
+        <select name="year_value" id="reportYearMonth" class="form-control">
+            <?php for($y = date('Y'); $y >= date('Y')-10; $y--): ?>
+                <option value="<?= $y ?>"><?= $y ?></option>
+            <?php endfor; ?>
+        </select>
+        <button class="btn btn-primary" data-request="onGetReports" id="getReportsBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            عرض التقرير
+        </button>
+    </div>
+
+<?php elseif($check == 'day'): ?>
+    <!-- Day selection -->
+    <div class="filter-group">
+        <label for="reportDate">اختر التاريخ:</label>
+        <input type="date" name="date_value" id="reportDate" class="form-control">
+        <button class="btn btn-primary" data-request="onGetReports" id="getReportsBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            عرض التقرير
+        </button>
+    </div>
+
+<?php endif; ?>

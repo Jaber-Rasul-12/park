@@ -159,78 +159,121 @@ public function onPrintInvoice()
         $this->vars['products'] = Product::with('prices')->get();
     }
 
-  public function onGetReports()
+    public function onGetDateFilters()
     {
-        $date = post('date_value');
+        $check = post('date_filter');
+        return [
+            '.reports-filter' => $this->makePartial('options_filter_date', ['check' => $check]),
+        ];
         
+    }
+
+public function onGetReports()
+{
+    $check = post('date_filter', 'day');
+    $date = post('date_value');
+    $month = post('month_value');
+    $year = post('year_value');
+    
+    // تعيين القيم الافتراضية
+    if ($check == 'day') {
         if (!$date) {
             $date = date('Y-m-d');
         }
-        
-        // جلب جميع المنتجات
-        $products = Product::orderBy('name')->get();
-        
-        // جلب جميع الفواتير في التاريخ المحدد
-        $invoices = Invoice::whereDate('created_at', $date)->get();
-        
-        $reportData = [];
-        $totalQuantity = 0;
-        $totalRevenue = 0;
-        
-        // حساب مبيعات كل منتج
-        foreach ($products as $product) {
-            // جلب فواتير هذا المنتج في التاريخ المحدد
-            $productInvoices = $invoices->where('product_id', $product->id);
-            
-            // حساب الكمية والإيرادات
-            $quantity = $productInvoices->sum('number');
-            $revenue = $productInvoices->sum('total_price');
-            
-            // إذا كان هناك مبيعات للمنتج
-            if ($quantity > 0 || $revenue > 0) {
-                $totalQuantity += $quantity;
-                $totalRevenue += $revenue;
-                
-                $reportData[] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'image' => $product->image,
-                    'quantity' => $quantity,
-                    'revenue' => $revenue
-                ];
-            }
+    } elseif ($check == 'month') {
+        if (!$month) {
+            $month = date('m');
         }
-        
-        // ترتيب حسب الأكثر مبيعاً
-        usort($reportData, function($a, $b) {
-            return $b['quantity'] - $a['quantity'];
-        });
-        
-        // حساب إجمالي الفواتير
-        $totalInvoices = $invoices->count();
-        
-        // تجهيز الملخص
-        $summary = [
-            'total_products' => count($reportData),
-            'total_quantity' => $totalQuantity,
-            'total_revenue' => $totalRevenue,
-            'total_invoices' => $totalInvoices,
-            'date' => $date
-        ];
-        
-        return [
-           
-            'success' => true,
-            'data' => $reportData,
-            'summary' => $summary,
-            '#body_new_new' => $this->makePartial('reports_table', [
-                'reports_data' => $reportData,
-                'summary' => $summary,
-                'selected_date' => $date
-            ])
-        ];
+        if (!$year) {
+            $year = date('Y');
+        }
+    } elseif ($check == 'year') {
+        if (!$year) {
+            $year = date('Y');
+        }
     }
-
+    
+    // جلب جميع المنتجات
+    $products = Product::orderBy('name')->get();
+    
+    // جلب الفواتير حسب نوع التقرير
+    $invoices = Invoice::query();
+    
+    if ($check == 'day') {
+        $invoices->whereDate('created_at', $date);
+        $periodText = "التقرير اليومي - " . date('d/m/Y', strtotime($date));
+    } elseif ($check == 'month') {
+        $invoices->whereMonth('created_at', $month)
+                 ->whereYear('created_at', $year);
+        $monthName = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
+                      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        $periodText = "التقرير الشهري - " . $monthName[$month-1] . " " . $year;
+    } elseif ($check == 'year') {
+        $invoices->whereYear('created_at', $year);
+        $periodText = "التقرير السنوي - " . $year;
+    }
+    
+    $invoices = $invoices->get();
+    
+    $reportData = [];
+    $totalQuantity = 0;
+    $totalRevenue = 0;
+    
+    // حساب مبيعات كل منتج
+    foreach ($products as $product) {
+        // جلب فواتير هذا المنتج
+        $productInvoices = $invoices->where('product_id', $product->id);
+        
+        // حساب الكمية والإيرادات
+        $quantity = $productInvoices->sum('number');
+        $revenue = $productInvoices->sum('total_price');
+        
+        // إذا كان هناك مبيعات للمنتج
+        if ($quantity > 0 || $revenue > 0) {
+            $totalQuantity += $quantity;
+            $totalRevenue += $revenue;
+            
+            $reportData[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'image' => $product->image,
+                'quantity' => $quantity,
+                'revenue' => $revenue 
+            ];
+        }
+    }
+    
+    // ترتيب حسب الأكثر مبيعاً
+    usort($reportData, function($a, $b) {
+        return $b['quantity'] - $a['quantity'];
+    });
+    
+    // حساب إجمالي الفواتير
+    $totalInvoices = $invoices->count();
+    
+    // تجهيز الملخص
+    $summary = [
+        'total_products' => count($reportData),
+        'total_quantity' => $totalQuantity,
+        'total_revenue' => $totalRevenue,
+        'total_invoices' => $totalInvoices,
+        'period_text' => $periodText
+    ];
+    
+    return [
+        'success' => true,
+        'data' => $reportData,
+        'summary' => $summary,
+        '#body_new_new' => $this->makePartial('reports_table', [
+            'reports_data' => $reportData,
+            'summary' => $summary,
+            'selected_date' => $date ?? null,
+            'selected_month' => $month ?? null,
+            'selected_year' => $year ?? null,
+            'check' => $check
+        ])
+    ];
+}
 
     
 

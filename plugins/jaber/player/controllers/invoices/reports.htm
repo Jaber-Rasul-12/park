@@ -12,19 +12,21 @@
     <form>
     <!-- رأس التقرير -->
     <div class="reports-header">
-        <h1>📊 تقرير المبيعات اليومية</h1>
+        <h1>📊 تقرير المبيعات </h1>
+
+         <div style="min-width: 200px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px; color: #495057;">السنوات</label>
+            <select name="date_filter" data-request="onGetDateFilters"
+                    data-ajax-delay="300" class="form-control custom-select" style="width: 100%;">
+                <option value=""><?= e(trans('finance.finance::lang.plugin.select')) ?></option>
+                <option value="year">تقرير سنوي</option>
+                <option value="month">تقرير شهري</option>
+                <option value="day">تقرير يومي</option>
+                <?php } ?>
+            </select>
+        </div>
         <div class="reports-filter">
-            <div class="filter-group">
-                <label for="reportDate">اختر التاريخ:</label>
-                <input type="date" name="date_value" id="reportDate" class="form-control" >
-                <button class="btn btn-primary" data-request="onGetReports" id="getReportsBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                    عرض التقرير
-                </button>
-            </div>
+           
         </div>
     </div>
     </form>
@@ -857,4 +859,3 @@
     }
 }
 </style>
- <?php } ?>
