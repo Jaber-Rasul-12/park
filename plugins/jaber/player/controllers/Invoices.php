@@ -77,67 +77,6 @@ public function invoices()
 
 
 
-// public function onPrintInvoice()
-// {
-//     $invoiceData = post('invoice_data');
-//     $invoiceData = json_decode($invoiceData, true);
-    
-//     if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
-//         return [
-//             'success' => false, 
-//             'message' => 'بيانات الفاتورة غير صحيحة'
-//         ];
-//     }
-
-//     try {
-//         $savedInvoices = [];
-//         $receiptsHtml = []; // مصفوفة لتخزين كل إيصال على حدة
-        
-//         // ====== لكل منتج في الفاتورة ======
-//         foreach ($invoiceData['items'] as $item) {
-//             $quantity = (int)$item['quantity'];
-            
-//             // ====== طباعة إيصال منفصل لكل قطعة ======
-//             for ($i = 0; $i < $quantity; $i++) {
-//                 // حفظ الفاتورة في قاعدة البيانات
-//                 $invoice = new Invoice();
-//                 $invoice->product_id = $item['product_id'];
-//                 $invoice->price_id = $item['price_id'];
-//                 $invoice->number = 1;
-//                 $invoice->total_price = $item['price'];
-//                 $invoice->created_at = now();
-//                 $invoice->updated_at = now();
-//                 $invoice->save();
-//                 $savedInvoices[] = $invoice->id;
-                
-//                 // ====== توليد HTML لكل إيصال على حدة ======
-//                 $receiptHtml = $this->makePartial('print_invoice', [
-//                     'item' => $item,
-//                     'copy_number' => $i + 1,
-//                     'total_copies' => $quantity,
-//                     'invoice_id' => $invoice->id,
-//                     'created_at' => now()->format('d/m/Y h:i A')
-//                 ]);
-                
-//                 $receiptsHtml[] = $receiptHtml; 
-//             }
-//         }
-        
-//         return [
-//             'success' => true,
-//             'message' => 'تم إنشاء الفواتير بنجاح',
-//             'invoice_ids' => $savedInvoices,
-//             'receipts' => $receiptsHtml // إرسال المصفوفة بدلاً من نص واحد
-//         ];
-        
-//     } catch (\Exception $e) {
-//         return [
-//             'success' => false,
-//             'message' => 'حدث خطأ: ' . $e->getMessage()
-//         ];
-//     }
-// }
-
 
 public function onPrintInvoice()
 {
