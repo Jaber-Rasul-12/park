@@ -16,6 +16,10 @@ columns:
     total_price:
         label: 'jaber.player::lang.model.invoice.total_price'
         type: text
+    uuid: 
+        label: 'jaber.player::lang.model.invoice.total_price'
+        type: text
+        searchable: true
     created_at:
         label: 'jaber.player::lang.model.invoice.created_at'
         type: datetime

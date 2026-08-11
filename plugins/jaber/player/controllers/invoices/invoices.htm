@@ -944,7 +944,7 @@ $(document).ready(function() {
             //         showToast('❌ ' + data.message, 'error');
             //     }
             // },
-            success: function(data) {
+           success: function(data) {
     $btn.prop('disabled', false);
     $btn.html(`
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -959,13 +959,21 @@ $(document).ready(function() {
     if (data.success) {
         showToast('✅ ' + data.message, 'success');
         
-        // ====== لا نفتح نافذة جديدة، فقط نعرض رسالة نجاح ======
-        // لا حاجة لـ printWindow بعد الآن، الطباعة تتم في الخلفية
+        // ====== الحصول على مصفوفة الإيصالات ======
+        var receipts = data.receipts || [];
         
+        if (receipts.length > 0) {
+            // ====== طباعة كل إيصال على حدة ======
+            printReceiptsOneByOne(receipts, 0);
+        } else {
+            showToast('❌ لا توجد إيصالات للطباعة', 'error');
+        }
+        
+        // ====== مسح السلة بعد 5 ثوان ======
         setTimeout(function() {
             cart = [];
             updateCart();
-        }, 3000);
+        }, 5000);
         
     } else {
         showToast('❌ ' + data.message, 'error');
@@ -989,6 +997,54 @@ $(document).ready(function() {
             }
         });
     });
+    
+    // ====== طباعة الإيصالات واحداً تلو الآخر ======
+function printReceiptsOneByOne(receipts, index) {
+    if (index >= receipts.length) {
+        showToast('✅ تم طباعة جميع الإيصالات', 'success');
+        return;
+    }
+    
+    var receiptHtml = receipts[index];
+    var total = receipts.length;
+    var current = index + 1;
+    
+    // ====== فتح نافذة جديدة ======
+    var printWindow = window.open('', '_blank', 'width=400,height=600,scrollbars=yes,resizable=yes');
+    
+    if (!printWindow) {
+        showToast('❌ يرجى السماح للنوافذ المنبثقة', 'error');
+        return;
+    }
+    
+    // ====== كتابة الإيصال في النافذة ======
+    printWindow.document.write(receiptHtml);
+    printWindow.document.close();
+    
+    // ====== طباعة تلقائية عند تحميل الصفحة ======
+    printWindow.onload = function() {
+        setTimeout(function() {
+            printWindow.print();
+        }, 500);
+    };
+    
+    // ====== بعد الانتهاء من الطباعة ======
+    printWindow.onafterprint = function() {
+        setTimeout(function() {
+            printWindow.close();
+            // ====== طباعة الإيصال التالي ======
+            printReceiptsOneByOne(receipts, index + 1);
+        }, 1000);
+    };
+    
+    // ====== في حال إغلاق النافذة يدوياً ======
+    printWindow.onclose = function() {
+        // استمر في طباعة الباقي
+        setTimeout(function() {
+            printReceiptsOneByOne(receipts, index + 1);
+        }, 1000);
+    };
+}
 
     // ====== عرض رسالة ======
     function showToast(message, type) {

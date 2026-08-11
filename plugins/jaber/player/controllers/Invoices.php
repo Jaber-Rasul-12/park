@@ -8,6 +8,7 @@ use BackendMenu;
 use Jaber\Player\Models\Product;
 use Flash;
 use DB;
+use Ramsey\Uuid\Uuid;
 
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
@@ -73,194 +74,137 @@ public function invoices()
     
     $this->vars['invoices'] = $products;
 }
-    public function onPrintInvoice()
-    {
-        $invoiceData = post('invoice_data');
-        $invoiceData = json_decode($invoiceData, true);
-        
-        if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
-            return [
-                'success' => false, 
-                'message' => 'بيانات الفاتورة غير صحيحة'
-            ];
-        }
 
-        try {
-            $savedInvoices = [];
-            
-            // حفظ الفواتير في قاعدة البيانات
-            foreach ($invoiceData['items'] as $item) {
-                // لكل منتج، نكرر الحفظ حسب الكمية
-                for ($i = 0; $i < $item['quantity']; $i++) {
-                    $invoice = new Invoice();
-                    $invoice->product_id = $item['product_id'];
-                    $invoice->price_id = $item['price_id'];
-                    $invoice->number = 1; // كل إيصال يمثل قطعة واحدة
-                    $invoice->total_price = $item['price'];
-                    $invoice->created_at = now();
-                    $invoice->updated_at = now();
-                    $invoice->save();
-                    $savedInvoices[] = $invoice->id;
-                }
-            }
-            
-            // ====== الطباعة المباشرة في الخلفية ======
-            $this->printReceiptsInBackground($invoiceData['items']);
-            
-            return [
-                'success' => true,
-                'message' => 'تم إنشاء الفواتير وطباعتها بنجاح',
-                'invoice_ids' => $savedInvoices
-            ];
-            
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'حدث خطأ: ' . $e->getMessage()
-            ];
-        }
-    }
 
-     /**
-     * طباعة الإيصالات في الخلفية (لكل منتج بعدد الوصلات حسب الكمية)
-     */
-    private function printReceiptsInBackground($items)
-    {
-        // اسم الطابعة كما يظهر في Windows (استخدم الأمر Get-Printer لمعرفته)
-        $printerName = "Rongta RP850"; // غيّر هذا حسب اسم الطابعة عندك
-        
-        try {
-            $connector = new WindowsPrintConnector($printerName);
-            $printer = new Printer($connector);
-            
-            // لكل منتج في الفاتورة
-            foreach ($items as $item) {
-                $quantity = (int)$item['quantity'];
-                
-                // طباعة إيصال منفصل لكل قطعة
-                for ($i = 0; $i < $quantity; $i++) {
-                    $this->printSingleReceipt($printer, $item, $i + 1, $quantity);
-                    
-                    // قص الورق بعد كل إيصال (إذا كان آخر إيصال للمنتج، نضيف مسافة)
-                    if ($i < $quantity - 1) {
-                        $printer->feed(2);
-                        $printer->cut();
-                    } else {
-                        $printer->feed(3);
-                        $printer->cut();
-                    }
-                }
-            }
-            
-            $printer->close();
-            
-        } catch (\Exception $e) {
-            // تسجيل الخطأ دون إيقاف التنفيذ
-            \Log::error('فشل الطباعة: ' . $e->getMessage());
-        }
-    }
 
-    /**
-     * طباعة إيصال واحد
-     */
-    private function printSingleReceipt($printer, $item, $copyNumber, $totalCopies)
-    {
-        $storeName = "حديقة أزادي";
-        $storePhone = "0934240928";
-        $designer = "جابر رسول";
-        $accountant = "علي حاتم علي";
-        $date = now()->format('d/m/Y h:i A');
-        $invoiceId = date('Ymd') . rand(1000, 9999);
-        
-        // مركز النص
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->text($storeName . "\n");
-        $printer->text("==============================\n");
-        
-        // معلومات الإيصال
-        $printer->setJustification(Printer::JUSTIFY_LEFT);
-        $printer->text("رقم الفاتورة: #" . $invoiceId . "\n");
-        $printer->text("التاريخ: " . $date . "\n");
-        
-        // إذا كان هناك أكثر من نسخة
-        if ($totalCopies > 1) {
-            $printer->text("النسخة: " . $copyNumber . " من " . $totalCopies . "\n");
-        }
-        
-        $printer->text("------------------------------\n");
-        
-        // رأس الجدول
-        $printer->setJustification(Printer::JUSTIFY_LEFT);
-        $printer->text(sprintf("%-20s %5s %8s\n", "المنتج", "عدد", "السعر"));
-        $printer->text("------------------------------\n");
-        
-        // المنتج
-        $name = mb_substr($item['product_name'], 0, 15, 'UTF-8');
-        $printer->text(sprintf("%-20s %5s %8s\n", $name, 1, number_format($item['price'])));
-        
-        $printer->text("------------------------------\n");
-        
-        // المجموع
-        $printer->setJustification(Printer::JUSTIFY_RIGHT);
-        $printer->text(sprintf("%-20s %20s\n", "المجموع:", number_format($item['price']) . " ر.س"));
-        
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->text("==============================\n");
-        $printer->text("شكراً لزيارتكم حديقة أزادي\n");
-        $printer->text("الاعداد المحاسبي: " . $accountant . "\n");
-        $printer->text("تصميم وبرمجة: " . $designer . "\n");
-        $printer->text("للتواصل: " . $storePhone . "\n");
-        $printer->text("==============================\n");
-    }
-//  public function onPrintInvoice()
-//     {
-//         $invoiceData = post('invoice_data');
-//         $invoiceData = json_decode($invoiceData, true);
-        
-//         if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
-//             return [
-//                 'success' => false, 
-//                 'message' => 'بيانات الفاتورة غير صحيحة'
-//             ];
-//         }
+// public function onPrintInvoice()
+// {
+//     $invoiceData = post('invoice_data');
+//     $invoiceData = json_decode($invoiceData, true);
+    
+//     if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
+//         return [
+//             'success' => false, 
+//             'message' => 'بيانات الفاتورة غير صحيحة'
+//         ];
+//     }
 
-//         try {
-//             $savedInvoices = [];
+//     try {
+//         $savedInvoices = [];
+//         $receiptsHtml = []; // مصفوفة لتخزين كل إيصال على حدة
+        
+//         // ====== لكل منتج في الفاتورة ======
+//         foreach ($invoiceData['items'] as $item) {
+//             $quantity = (int)$item['quantity'];
             
-//             foreach ($invoiceData['items'] as $item) {
+//             // ====== طباعة إيصال منفصل لكل قطعة ======
+//             for ($i = 0; $i < $quantity; $i++) {
+//                 // حفظ الفاتورة في قاعدة البيانات
 //                 $invoice = new Invoice();
 //                 $invoice->product_id = $item['product_id'];
 //                 $invoice->price_id = $item['price_id'];
-//                 $invoice->number = $item['quantity'];
-//                 $invoice->total_price = $item['subtotal'];
+//                 $invoice->number = 1;
+//                 $invoice->total_price = $item['price'];
 //                 $invoice->created_at = now();
 //                 $invoice->updated_at = now();
 //                 $invoice->save();
 //                 $savedInvoices[] = $invoice->id;
+                
+//                 // ====== توليد HTML لكل إيصال على حدة ======
+//                 $receiptHtml = $this->makePartial('print_invoice', [
+//                     'item' => $item,
+//                     'copy_number' => $i + 1,
+//                     'total_copies' => $quantity,
+//                     'invoice_id' => $invoice->id,
+//                     'created_at' => now()->format('d/m/Y h:i A')
+//                 ]);
+                
+//                 $receiptsHtml[] = $receiptHtml; 
 //             }
-            
-//             $html = $this->makePartial('print_invoice', [
-//                 'items' => $invoiceData['items'],
-//                 'total' => $invoiceData['total'],
-//                 'invoice_ids' => implode(', ', $savedInvoices),
-//                 'created_at' => now()->format('d/m/Y h:i A')
-//             ]);
-            
-//             return [
-//                 'success' => true,
-//                 'message' => 'تم إنشاء الفواتير بنجاح',
-//                 'invoice_ids' => $savedInvoices,
-//                 'html' => $html
-//             ];
-            
-//         } catch (\Exception $e) {
-//             return [
-//                 'success' => false,
-//                 'message' => 'حدث خطأ: ' . $e->getMessage()
-//             ];
 //         }
+        
+//         return [
+//             'success' => true,
+//             'message' => 'تم إنشاء الفواتير بنجاح',
+//             'invoice_ids' => $savedInvoices,
+//             'receipts' => $receiptsHtml // إرسال المصفوفة بدلاً من نص واحد
+//         ];
+        
+//     } catch (\Exception $e) {
+//         return [
+//             'success' => false,
+//             'message' => 'حدث خطأ: ' . $e->getMessage()
+//         ];
 //     }
+// }
 
+
+public function onPrintInvoice()
+{
+    $invoiceData = post('invoice_data');
+    $invoiceData = json_decode($invoiceData, true);
+    
+    if (!$invoiceData || !isset($invoiceData['items']) || empty($invoiceData['items'])) {
+        return [
+            'success' => false, 
+            'message' => 'بيانات الفاتورة غير صحيحة'
+        ];
+    }
+
+    try {
+        // ====== عدد النسخ ثابت = 1 (يمكنك تغييره هنا مباشرة) ======
+        $printCopies = 1; // غيّر هذا الرقم إلى عدد النسخ الذي تريده
+        
+        $savedInvoices = [];
+        $receiptsHtml = [];
+        
+        // ====== لكل منتج في الفاتورة ======
+        foreach ($invoiceData['items'] as $item) {
+            $quantity = (int)$item['quantity'];
+            
+            // ====== حفظ فاتورة واحدة فقط لكل منتج ======
+            $invoice = new Invoice();
+            $invoice->product_id = $item['product_id'];
+            $invoice->price_id = $item['price_id'];
+            $invoice->number = $quantity; 
+            $invoice->uuid = 'azadi-park-number : ' . uniqid();
+            $invoice->total_price = $item['price'] * $quantity;
+            $invoice->created_at = now();
+            $invoice->updated_at = now();
+            $invoice->save();
+            $savedInvoices[] = $invoice->id;
+            
+            // ====== طباعة عدد النسخ المحدد ======
+            for ($i = 0; $i < $printCopies; $i++) {
+                $receiptHtml = $this->makePartial('print_invoice', [
+                    'item' => $item,
+                    'copy_number' => $i + 1,
+                    'uuid'=> $invoice->uuid,
+                    'total_copies' => $printCopies,
+                    'invoice_id' => $invoice->id,
+                    'created_at' => now()->format('d/m/Y h:i A'),
+                    'quantity' => 1,
+                    'total_price' => $item['price'] * $quantity
+                ]);
+                
+                $receiptsHtml[] = $receiptHtml;
+            }
+        }
+        
+        return [
+            'success' => true,
+            'message' => 'تم إنشاء الفواتير بنجاح',
+            'invoice_ids' => $savedInvoices,
+            'receipts' => $receiptsHtml
+        ];
+        
+    } catch (\Exception $e) {
+        return [
+            'success' => false,
+            'message' => 'حدث خطأ: ' . $e->getMessage()
+        ];
+    }
+}
 
     // ====== دالة التقارير ======
     public function reports()

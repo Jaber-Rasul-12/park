@@ -1,134 +1,63 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>إيصال الفاتورة</title>
+    <title>إيصال</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: Arial, sans-serif;
-            width: 80mm;
-            margin: 0 auto;
-            padding: 0;
-            font-weight: bold;
-            background: white;
-        }
-        .receipt {
-            padding: 3mm 2mm;
-            width: 80mm;
-        }
-        .text-center { text-align: center; font-weight: bold; }
-        .divider { border: none; border-top: 1px dashed #000000; margin: 5px 0; font-weight: bold;}
-        .flex-between { display: flex; justify-content: space-between; font-weight: bold; }
-        .product-name { flex: 2; text-align: right; padding-right: 5px; font-weight: bold;}
-        .product-qty { flex: 0.8; text-align: center; }
-        .product-price { flex: 1; text-align: left; padding-left: 5px; font-weight: bold; }
-        .total-box { 
-            display: flex; 
-            justify-content: space-between; 
-            background: #f5f5f5; 
-            padding: 2px 4px;
-            margin: 2px 0;
-            font-weight: bold;
-        }
-        .total-label { font-weight: bold; font-size: 12px; }
-        .total-amount { font-weight: bold; font-size: 14px; color: #000000; font-weight: bold;}
-        .store-name { font-size: 14px; margin: 0; color: #000000; font-weight: bold;}
-        .store-slogan { font-size: 10px; color: #000000; margin: 1px 0; font-weight: bold;}
-        .store-logo { 
-            width: 30px; 
-            height: 30px; 
-            margin: 0 auto 2px; 
-            display: block;
-            border-radius: 5%;
-            font-weight: bold;
-        }
-        .receipt-meta { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 10px; 
-            padding: 2px 0;
-            font-weight: bold;
-        }
-        .table-header {
-            display: flex;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 2px solid #000000;
-            padding: 2px 0;
-        }
-        .item-row {
-            display: flex;
-            padding: 2px 0;
-            border-bottom: 1px solid #000000;
-        }
-        .footer-text { text-align: center; padding: 5px 0 2px; font-weight: bold; }
-        .footer-text p { font-size: 10px; margin: 1px 0; font-weight: bold; }
-        .footer-text .thanks { color: #000000; font-size: 12px; font-weight: bold; }
-        .footer-text .designer { font-size: 11px; color: #000000; margin-top: 2px; font-weight: bold; }
+        html, body { margin: 0 !important; padding: 0 !important; }
+        body { width: 80mm; }
+        .receipt { padding: 0 !important; margin: 0 !important; }
+        @page { margin: 0 !important; padding: 0 !important; size: 80mm auto; }
+        @media print { html, body { margin: 0 !important; padding: 0 !important; } .receipt { padding: 0 !important; } }
         
-        @page {
-            margin: 0;
-            padding: 0;
-            size: 40mm auto;
-            font-weight: bold;
-        }
-        @media print {
-            body { width: 40mm; font-weight: bold; margin: 0; padding: 0; }
-            .receipt { padding: 2mm 1mm; font-weight: bold; }
-        }
+        .receipt * { font-family: Arial; font-weight: bold; line-height: 1.1; }
+        .divider { border: none; border-top: 2px solid #000; margin: 0 !important; }
+        .table-header, .item-row { display: flex; font-size: 13px; padding: 1px 0; }
+        .table-header { border-bottom: 2px solid #000; }
+        .item-row { border-bottom: 1px solid #000; }
+        .product-name { flex: 2; text-align: right; padding-right: 3px; }
+        .product-qty { flex: 0.8; text-align: center; }
+        .product-price { flex: 1; text-align: left; padding-left: 3px; }
+        .footer-text { text-align: center; padding: 0 !important; }
+        .footer-text p { font-size: 11px; margin: 0 !important; line-height: 1.1; }
+        .footer-text .thanks { font-size: 13px; }
+        .header-info { display: flex; justify-content: space-between; font-size: 11px; padding: 0; margin: 0; }
+        .total { display: flex; justify-content: space-between; padding: 1px 0; font-size: 14px; }
+        .copy-number { text-align: center; font-size: 10px; color: #666; margin-top: 2px; }
     </style>
 </head>
 <body>
     <div class="receipt">
-        <div class="text-center">
+        <div class="header-info">
+            <span><?= e($uuid) ?></span>
+            <span><?= e($created_at ?? now()->format('d/m/Y h:i A')) ?></span>
+        </div>
+        <hr class="divider">
+        <div class="table-header">
+            <span class="product-name">المنتج</span>
+            <span class="product-qty">عدد</span>
+            <span class="product-price">السعر</span>
+        </div>
+        <?php if(isset($item) && !empty($item)): ?>
+        <div class="item-row">
+            <span class="product-name"><?= e($item['product_name']) ?></span>
+            <span class="product-qty"><?= e($quantity ?? $item['quantity'] ?? 1) ?></span>
+            <span class="product-price"><?= e(number_format($item['price'])) ?></span>
+        </div>
+        <?php endif; ?>
+        <hr class="divider">
+        <div class="total">
+            <span>المجموع</span>
+            <span><?= e(number_format($total_price ?? ($item['price'] * $item['quantity'] ?? 0))) ?> ر.س</span>
+        </div>
+        <hr class="divider">
+        <div class="footer-text">
+            <p>الاعداد المحاسبي : علي حاتم علي</p>
+            <p>تصميم و برمجة : جابر رسول - 0934240928</p>
            
-            <div class="receipt-meta">
-                <span><strong>رقم الفاتورة:</strong> #<?= e($invoice_ids ?? date('Ymd') . rand(1000, 9999)) ?></span>
-                <span><?= e($created_at ?? now()->format('d/m/Y h:i A')) ?></span>
-            </div>
-        </div>
-
-        <div>
-            <div class="table-header">
-                <span class="product-name">المنتج</span>
-                <span class="product-qty">العدد</span>
-                <span class="product-price">السعر</span>
-            </div>
-            <?php if(isset($items) && !empty($items)): ?>
-                <?php foreach($items as $item): ?>
-                <div class="item-row">
-                    <span class="product-name"><?= e($item['product_name']) ?></span>
-                    <span class="product-qty">1</span>
-                    <span class="product-price"><?= e(number_format($item['price'])) ?></span>
-                </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-
-        <div style="margin-top: 1px;">
-            <hr class="divider">
-            <hr class="divider">
-            <div class="footer-text">
-                <p>شكراً لزيارتكم حديقة أزادي</p>
-                <p class="thanks"> الاعداد المحاسبي : ألاستاذ علي حاتم علي </p>
-                <p class="designer">تصميم و برمجة : المهندس جابر رسول -  للتواصل : 0934240928 </p>
-                <p class="designer"> </p>
-            </div>
         </div>
     </div>
-    <script>
-        window.onload = function() {
-            setTimeout(function() {
-                window.print();
-            }, 500);
-            
-            window.onafterprint = function() {
-                setTimeout(function() {
-                    window.close();
-                }, 1000);
-            };
-        };
-    </script>
 </body>
 </html>

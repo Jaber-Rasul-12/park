@@ -14,6 +14,7 @@ class BuilderTableCreateJaberPlayerInvoices extends Migration
             $table->integer('product_id')->unsigned()->index();
             $table->integer('price_id')->unsigned()->index();
             $table->double('number', 10, 0);
+            $table->text('uuid');
             $table->double('total_price', 10, 0);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
