@@ -16,15 +16,15 @@ class Invoice extends Model
      * @var string The database table used by the model.
      */
     public $table = 'jaber_player_invoices';
-    public $fillable = ['product_id' , 'price_id' , 'number' , 'total_price' , 'uuid'];
+    public $fillable = ['product_id' , 'price_id' , 'number'];
 
   public $rules = [
         'product_id' => 'required|exists:jaber_player_products,id',
         'price_id' => 'required|exists:jaber_player_prices,id',
         'number' => 'required|numeric|min:1',
-        'uuid'=> 'required',
-        'total_price' => 'required|numeric|min:0',
     ];
+
+
 
     public $belongsTo = [
         'product' => [

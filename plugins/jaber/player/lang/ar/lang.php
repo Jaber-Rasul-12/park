@@ -31,26 +31,24 @@ return [
         'total_price' => 'السعر الإجمالي',
         'message_delete' => 'لا يمكن الحذف بسبب وجود بيانات مرتبطة بالقسم',
         'price_require' => 'السعر مطلوب',
-         'error_status_save' => 'لا يمكن الحفظ بسبب وجود قسم اخر مفعل',
+        'error_status_save' => 'لا يمكن الحفظ بسبب وجود قسم اخر مفعل',
         'create_and_new' => 'إنشاء وجديد',
-'invoice_speed'=>'نقطة البيع',
-'point_of_sale'=>' نقطة البيع',
-        'delete_invoice'=>' حذف الفاتورة',
-        'report_invoice'=>' تقرير الفاتورة',
-
-
+        'invoice_speed' => 'نقطة البيع',
+        'point_of_sale' => ' نقطة البيع',
+        'delete_invoice' => ' حذف الفاتورة',
+        'report_invoice' => ' تقرير الفاتورة',
     ],
     'model' => [
         'product' => [
             'id' => 'المعرف',
-             'price' => 'السعر',
+            'price' => 'السعر',
             'name' => 'الاسم',
             'created_at' => 'تاريخ الإنشاء',
             'updated_at' => 'تاريخ التحديث',
         ],
         'price' => [
             'id' => 'المعرف',
-             'status' => 'الحالة',
+            'status' => 'الحالة',
             'product' => 'المنتج',
             'price' => 'السعر',
             'created_at' => 'تاريخ الإنشاء',
@@ -69,7 +67,6 @@ return [
         ],
     ],
     'controller' => [
-       
         'products' => [
             'products' => 'الالعاب',
         ],
@@ -78,6 +75,16 @@ return [
         ],
         'invoices' => [
             'invoices' => 'الفواتير',
+        ],
+    ],
+    'models' => [
+        'restquantity' => [
+            'label' => 'Rest Quantity',
+            'label_plural' => 'Rest Quantities',
+        ],
+        'invoice' => [
+            'label' => 'Invoice',
+            'label_plural' => 'Invoices',
         ],
     ],
 ];
