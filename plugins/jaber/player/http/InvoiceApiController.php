@@ -14,9 +14,9 @@ use Carbon\Carbon;
 class InvoiceApiController extends Controller
 {
     /**
-     * API Key ثابت
+     * API Key ثابت - نفس المفتاح المستخدم في تطبيق Java
      */
-    protected $apiKey = 'YOUR_SECRET_API_KEY_123456789';
+    protected $apiKey = 'azadi_park_jaber_ali_12122121';
 
     /**
      * التحقق من API Key
@@ -49,7 +49,6 @@ class InvoiceApiController extends Controller
      */
     public function index(Request $request)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;
@@ -78,17 +77,16 @@ class InvoiceApiController extends Controller
      */
     public function store(Request $request)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;
         }
 
         try {
-            // Validate the request
+            // Validate the request - price_id أصبح اختيارياً
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:jaber_player_products,id',
-                'price_id' => 'required|exists:jaber_player_prices,id',
+                'price_id' => 'sometimes|exists:jaber_player_prices,id',
                 'number' => 'required|numeric|min:1',
             ]);
 
@@ -114,19 +112,38 @@ class InvoiceApiController extends Controller
                         'product_id' => $request->product_id,
                         'date' => $today->toDateString()
                     ]
-                ], 409); // 409 Conflict
+                ], 409);
             }
 
-            // Create the invoice
+            // الحصول على price_id المناسب
+            $priceId = $request->input('price_id');
+            
+            // إذا لم يتم إرسال price_id، جلب أحدث سعر للمنتج
+            if (empty($priceId)) {
+                $latestPrice = Price::where('product_id', $request->product_id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                    
+                if (!$latestPrice) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No price found for this product. Please set a price first.'
+                    ], 422);
+                }
+                $priceId = $latestPrice->id;
+            }
+
+            // حساب total_price
+            $price = Price::find($priceId);
+            $totalPrice = $price ? $price->price * $request->number : 0;
+
+            // Create the invoice مع إضافة total_price
             $invoice = Invoice::create([
                 'product_id' => $request->product_id,
-                'price_id' => $request->price_id,
+                'price_id' => $priceId,
                 'number' => $request->number,
+                'total_price' => $totalPrice, 
             ]);
-
-            // Calculate total price
-            $price = Price::find($request->price_id);
-            $totalPrice = $price ? $price->price * $request->number : 0;
 
             // Load relationships for the response
             $invoice->load(['product', 'price']);
@@ -155,7 +172,6 @@ class InvoiceApiController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;
@@ -196,7 +212,6 @@ class InvoiceApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;
@@ -246,7 +261,20 @@ class InvoiceApiController extends Controller
                 }
             }
 
-            $invoice->update($request->all());
+            // تحديث الحقول
+            $updateData = $request->all();
+            
+            // إذا تم تحديث السعر أو الكمية، قم بتحديث total_price
+            if ($request->has('price_id') || $request->has('number')) {
+                $priceId = $request->input('price_id', $invoice->price_id);
+                $number = $request->input('number', $invoice->number);
+                $price = Price::find($priceId);
+                if ($price) {
+                    $updateData['total_price'] = $price->price * $number;
+                }
+            }
+
+            $invoice->update($updateData);
             $invoice->load(['product', 'price']);
 
             // Calculate new total price if fields are updated
@@ -276,7 +304,6 @@ class InvoiceApiController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;
@@ -312,7 +339,6 @@ class InvoiceApiController extends Controller
      */
     public function checkToday(Request $request)
     {
-        // التحقق من المفتاح
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
             return $authCheck;

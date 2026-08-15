@@ -16,7 +16,7 @@ class Invoice extends Model
      * @var string The database table used by the model.
      */
     public $table = 'jaber_player_invoices';
-    public $fillable = ['product_id' , 'price_id' , 'number'];
+    public $fillable = ['product_id' , 'price_id' , 'number' ,'total_price'];
 
   public $rules = [
         'product_id' => 'required|exists:jaber_player_products,id',
