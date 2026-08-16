@@ -8,11 +8,17 @@ use Model;
 /**
  * Model
  */
+use Jacob\Logbook\Traits\LogChanges;
 class Price extends Model
 {
   use \Winter\Storm\Database\Traits\Validation;
 
-
+        use LogChanges;
+  public $logBookModelName = 'jaber.player::lang.plugin.prices';
+  public static function changeLogBookDisplayColumn($column)
+  {
+    return 'jaber.player::lang.model.price.' . $column;
+  }
 
   /**
    * @var string The database table used by the model.

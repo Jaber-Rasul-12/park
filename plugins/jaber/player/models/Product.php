@@ -8,10 +8,16 @@ use Model;
 /**
  * Model
  */
+use Jacob\Logbook\Traits\LogChanges;
 class Product extends Model
 {
   use \Winter\Storm\Database\Traits\Validation;
-
+        use LogChanges;
+  public $logBookModelName = 'jaber.player::lang.plugin.products';
+  public static function changeLogBookDisplayColumn($column)
+  {
+    return 'jaber.player::lang.model.product.' . $column;
+  }
 
  use \Winter\Storm\Database\Traits\Purgeable; 
  protected $purgeable = ['price'];

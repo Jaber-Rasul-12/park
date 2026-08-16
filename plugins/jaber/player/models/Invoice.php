@@ -6,11 +6,17 @@ use Model;
 /**
  * Model
  */
+use Jacob\Logbook\Traits\LogChanges;
 class Invoice extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-
+        use LogChanges;
+  public $logBookModelName = 'jaber.player::lang.plugin.invoices';
+  public static function changeLogBookDisplayColumn($column)
+  {
+    return 'jaber.player::lang.model.invoice.' . $column;
+  }
 
     /**
      * @var string The database table used by the model.
