@@ -13,3 +13,10 @@ fields:
         label: 'jaber.player::lang.model.price.status'
         span: auto
         type: switch
+    _logbook@update:
+            type: jacob_logbook_log
+            limitPerPage: 10 
+            startPage: 1 
+            permissions: log_changes_player
+            showUndoChangesButton: true 
+            refreshFormAfterUndo: true 

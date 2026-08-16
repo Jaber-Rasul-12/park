@@ -8,3 +8,10 @@ fields:
         context: 'create'
         span: auto
         type: number
+    _logbook@update:
+            type: jacob_logbook_log
+            limitPerPage: 10 
+            startPage: 1 
+            permissions: log_changes_player
+            showUndoChangesButton: true 
+            refreshFormAfterUndo: true 

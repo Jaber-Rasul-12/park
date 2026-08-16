@@ -29,6 +29,11 @@ permissions:
     report_invoice:
         tab: 'jaber.player::lang.plugin.player'
         label: 'jaber.player::lang.plugin.report_invoice'
+    log_changes_player:
+        tab: 'jaber.player::lang.plugin.player'
+        label: 'jaber.player::lang.plugin.log_changes_player'
+
+        
 navigation:
     player:
         label: 'jaber.player::lang.plugin.player'

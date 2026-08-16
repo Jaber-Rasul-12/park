@@ -37,6 +37,7 @@ return [
         'point_of_sale'=>' Point of sale',
         'delete_invoice'=>' Delete invoice',
         'report_invoice'=>' Report invoice',
+        'log_changes_player'=>' Log changes player',
     ],
     'model' => [
 

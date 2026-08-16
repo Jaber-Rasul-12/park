@@ -37,6 +37,8 @@ return [
         'point_of_sale' => ' نقطة البيع',
         'delete_invoice' => ' حذف الفاتورة',
         'report_invoice' => ' تقرير الفاتورة',
+        'log_changes_player'=>' سجل التغييرات',
+
     ],
     'model' => [
         'product' => [
