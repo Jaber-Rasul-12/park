@@ -28,7 +28,7 @@ class Price extends Model
   public $fillable = ['price'];
 
   public $rules = [
-    'price' => 'required|numeric|min:0',
+    'price' => 'required|numeric',
     'product_id'  => 'required|exists:jaber_player_products,id',
   ];
 
