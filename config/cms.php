@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'backendTimezone' => 'UTC',
+    'backendTimezone' => 'Asia/Damascus',
 
     /*
     |--------------------------------------------------------------------------
