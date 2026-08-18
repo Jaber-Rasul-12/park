@@ -32,7 +32,7 @@
     <div class="receipt">
         <div class="header-info">
             <span><?= e($uuid) ?></span>
-            <span><?= e($created_at ?? now()->format('d/m/Y h:i A')) ?></span>
+            <span><?= e($date ?? now()->format('d/m/Y h:i A')) ?></span>
         </div>
         <hr class="divider">
         <div class="table-header">

@@ -16,6 +16,9 @@ columns:
     total_price:
         label: 'jaber.player::lang.model.invoice.total_price'
         type: text
+    date:
+        label: 'jaber.player::lang.model.invoice.date'
+        type: date 
     created_at:
         label: 'jaber.player::lang.model.invoice.created_at'
         type: datetime

@@ -15,6 +15,7 @@ class BuilderTableCreateJaberPlayerInvoices extends Migration
             $table->integer('price_id')->unsigned()->index();
             $table->double('number', 10, 0);
             $table->double('total_price', 10, 0);
+            $table->timestamp('date')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->foreign('product_id')

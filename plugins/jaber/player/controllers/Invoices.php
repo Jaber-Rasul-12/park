@@ -108,8 +108,7 @@ public function onPrintInvoice()
             $invoice->number = $quantity; 
             $invoice->uuid = 'azadi-park-number : ' . uniqid();
             $invoice->total_price = $item['price'] * $quantity;
-            $invoice->created_at = now();
-            $invoice->updated_at = now();
+            $invoice->date = now();
             $invoice->save();
             $savedInvoices[] = $invoice->id;
             
@@ -121,7 +120,7 @@ public function onPrintInvoice()
                     'uuid'=> $invoice->uuid,
                     'total_copies' => $printCopies,
                     'invoice_id' => $invoice->id,
-                    'created_at' => now()->format('d/m/Y h:i A'),
+                    'date' => now()->format('d/m/Y'),
                     'quantity' => 1,
                     'total_price' => $item['price'] * $quantity
                 ]);
@@ -200,16 +199,16 @@ public function onGetReports()
     $invoices = Invoice::query();
     
     if ($check == 'day') {
-        $invoices->whereDate('created_at', $date);
+        $invoices->whereDate('date', $date);
         $periodText = "التقرير اليومي - " . date('d/m/Y', strtotime($date));
     } elseif ($check == 'month') {
-        $invoices->whereMonth('created_at', $month)
-                 ->whereYear('created_at', $year);
+        $invoices->whereMonth('date', $month)
+                 ->whereYear('date', $year);
         $monthName = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
                       'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
         $periodText = "التقرير الشهري - " . $monthName[$month-1] . " " . $year;
     } elseif ($check == 'year') {
-        $invoices->whereYear('created_at', $year);
+        $invoices->whereYear('date', $year);
         $periodText = "التقرير السنوي - " . $year;
     }
     
