@@ -83,11 +83,12 @@ class InvoiceApiController extends Controller
         }
 
         try {
-            // Validate the request - price_id أصبح اختيارياً
+            // Validate the request
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:jaber_player_products,id',
                 'price_id' => 'sometimes|exists:jaber_player_prices,id',
                 'number' => 'required|numeric|min:1',
+                'date' => 'sometimes|date', // يمكن إرسال تاريخ محدد
             ]);
 
             if ($validator->fails()) {
@@ -97,20 +98,24 @@ class InvoiceApiController extends Controller
                 ], 422);
             }
 
-            // التحقق: هل يوجد فاتورة لنفس المنتج اليوم؟
-            $today = Carbon::today();
+            // استخدام التاريخ المرسل أو تاريخ اليوم
+            $invoiceDate = $request->input('date') 
+                ? Carbon::parse($request->input('date'))->startOfDay()
+                : Carbon::today();
+
+            // التحقق: هل يوجد فاتورة لنفس المنتج في نفس التاريخ؟
             $existingInvoice = Invoice::where('product_id', $request->product_id)
-                ->whereDate('created_at', $today)
+                ->whereDate('date', $invoiceDate)
                 ->first();
 
             if ($existingInvoice) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invoice already exists for this product today.',
+                    'message' => 'Invoice already exists for this product on this date.',
                     'data' => [
                         'existing_invoice' => $existingInvoice,
                         'product_id' => $request->product_id,
-                        'date' => $today->toDateString()
+                        'date' => $invoiceDate->toDateString()
                     ]
                 ], 409);
             }
@@ -137,12 +142,13 @@ class InvoiceApiController extends Controller
             $price = Price::find($priceId);
             $totalPrice = $price ? $price->price * $request->number : 0;
 
-            // Create the invoice مع إضافة total_price
+            // Create the invoice مع إضافة التاريخ
             $invoice = Invoice::create([
                 'product_id' => $request->product_id,
                 'price_id' => $priceId,
                 'number' => $request->number,
-                'total_price' => $totalPrice, 
+                'total_price' => $totalPrice,
+                'date' => $invoiceDate, // استخدام التاريخ المحدد
             ]);
 
             // Load relationships for the response
@@ -231,6 +237,7 @@ class InvoiceApiController extends Controller
                 'product_id' => 'sometimes|exists:jaber_player_products,id',
                 'price_id' => 'sometimes|exists:jaber_player_prices,id',
                 'number' => 'sometimes|numeric|min:1',
+                'date' => 'sometimes|date',
             ]);
 
             if ($validator->fails()) {
@@ -240,22 +247,25 @@ class InvoiceApiController extends Controller
                 ], 422);
             }
 
-            // إذا تم تغيير product_id، تحقق من عدم وجود فاتورة أخرى لنفس المنتج اليوم
+            // إذا تم تغيير product_id، تحقق من عدم وجود فاتورة أخرى لنفس المنتج في نفس التاريخ
             if ($request->has('product_id') && $request->product_id != $invoice->product_id) {
-                $today = Carbon::today();
+                $invoiceDate = $request->has('date') 
+                    ? Carbon::parse($request->input('date'))->startOfDay()
+                    : Carbon::parse($invoice->date)->startOfDay();
+                    
                 $existingInvoice = Invoice::where('product_id', $request->product_id)
-                    ->whereDate('created_at', $today)
+                    ->whereDate('date', $invoiceDate)
                     ->where('id', '!=', $id)
                     ->first();
 
                 if ($existingInvoice) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Another invoice already exists for this product today.',
+                        'message' => 'Another invoice already exists for this product on this date.',
                         'data' => [
                             'existing_invoice' => $existingInvoice,
                             'product_id' => $request->product_id,
-                            'date' => $today->toDateString()
+                            'date' => $invoiceDate->toDateString()
                         ]
                     ], 409);
                 }
@@ -272,6 +282,11 @@ class InvoiceApiController extends Controller
                 if ($price) {
                     $updateData['total_price'] = $price->price * $number;
                 }
+            }
+
+            // إذا تم إرسال تاريخ، قم بتحويله
+            if ($request->has('date')) {
+                $updateData['date'] = Carbon::parse($request->input('date'))->startOfDay();
             }
 
             $invoice->update($updateData);
@@ -335,9 +350,9 @@ class InvoiceApiController extends Controller
     }
 
     /**
-     * التحقق من وجود فاتورة اليوم لمنتج معين
+     * التحقق من وجود فاتورة في تاريخ محدد لمنتج معين
      */
-    public function checkToday(Request $request)
+    public function checkByDate(Request $request)
     {
         $authCheck = $this->validateApiKey($request);
         if ($authCheck) {
@@ -347,6 +362,7 @@ class InvoiceApiController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:jaber_player_products,id',
+                'date' => 'sometimes|date', // إذا لم يتم إرسال التاريخ، يستخدم تاريخ اليوم
             ]);
 
             if ($validator->fails()) {
@@ -356,9 +372,12 @@ class InvoiceApiController extends Controller
                 ], 422);
             }
 
-            $today = Carbon::today();
+            $checkDate = $request->input('date') 
+                ? Carbon::parse($request->input('date'))->startOfDay()
+                : Carbon::today();
+
             $invoice = Invoice::where('product_id', $request->product_id)
-                ->whereDate('created_at', $today)
+                ->whereDate('date', $checkDate)
                 ->with(['product', 'price'])
                 ->first();
 
@@ -366,7 +385,7 @@ class InvoiceApiController extends Controller
                 return response()->json([
                     'success' => true,
                     'exists' => true,
-                    'message' => 'Invoice exists for today',
+                    'message' => 'Invoice exists for this date',
                     'data' => $invoice
                 ], 200);
             }
@@ -374,7 +393,7 @@ class InvoiceApiController extends Controller
             return response()->json([
                 'success' => true,
                 'exists' => false,
-                'message' => 'No invoice exists for today',
+                'message' => 'No invoice exists for this date',
                 'data' => null
             ], 200);
 
@@ -382,6 +401,52 @@ class InvoiceApiController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to check invoice: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * التحقق من وجود فواتير في تاريخ محدد
+     */
+    public function checkInvoicesByDate(Request $request)
+    {
+        $authCheck = $this->validateApiKey($request);
+        if ($authCheck) {
+            return $authCheck;
+        }
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'date' => 'required|date',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $checkDate = Carbon::parse($request->input('date'))->startOfDay();
+            $invoices = Invoice::whereDate('date', $checkDate)
+                ->with(['product', 'price'])
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'exists' => $invoices->count() > 0,
+                'message' => $invoices->count() > 0 
+                    ? 'Found ' . $invoices->count() . ' invoices for this date'
+                    : 'No invoices found for this date',
+                'date' => $checkDate->toDateString(),
+                'count' => $invoices->count(),
+                'data' => $invoices
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to check invoices: ' . $e->getMessage()
             ], 500);
         }
     }

@@ -26,4 +26,9 @@ Route::prefix('api')->namespace('Jaber\Player\Http')->group(function () {
     Route::put('invoice/{id}', 'InvoiceApiController@update');
     Route::delete('invoice/{id}', 'InvoiceApiController@destroy');
     Route::get('invoice/check-today', 'InvoiceApiController@checkToday');
+    
+    Route::get('invoices/check-by-date', 'InvoiceApiController@checkInvoicesByDate');
+    
+    // التحقق من وجود فاتورة لمنتج معين في تاريخ محدد
+    Route::get('invoice/check-by-date', 'InvoiceApiController@checkByDate');
 });
