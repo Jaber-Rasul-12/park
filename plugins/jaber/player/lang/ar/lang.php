@@ -62,6 +62,8 @@ return [
             'invoice' => 'الفاتورة',
             'category' => 'الفئة',
             'price' => 'السعر',
+            'date' => 'التاريخ',
+
             'number' => 'العدد',
             'total_price' => 'السعر الإجمالي',
             'created_at' => 'تاريخ الإنشاء',

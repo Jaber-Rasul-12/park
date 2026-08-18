@@ -61,6 +61,7 @@ return [
             'id' => 'Id',
             'product' => 'Product',
             'invoice' => 'Invoice',
+            'date' => 'Date',
             'category' => 'Category',
             'price' => 'Price',
             'number' => 'Number',
