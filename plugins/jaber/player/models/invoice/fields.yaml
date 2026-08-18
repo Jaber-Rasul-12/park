@@ -27,6 +27,7 @@ fields:
         label: 'jaber.player::lang.model.invoice.date'
         type: datepicker
         mode: date
+        ignoreTimezone: false
     _logbook@update:
             type: jacob_logbook_log
             limitPerPage: 10 
